@@ -23,6 +23,11 @@ public class CartResponseDto {
     private int price;
     
     public int getPrice() {
-    	return productDto.getDiscountPrice()*quantity;
+    	if(productDto!=null) {
+    		return productDto.getPrice()*quantity;
+    		
+    	}else {
+    		return 0;
+    	}
     }
 }
