@@ -30,6 +30,11 @@ public class OrderDto {
     private OrderStatus orderStatus;
     
     public int getPrice() {
-    	return productDto.getPrice()*quantity;
+    	if(productDto!=null) {
+    		return productDto.getPrice()*quantity;
+    		
+    	}else {
+    		return 0;
+    	}
     }
 }

@@ -41,13 +41,13 @@ public class OrderController {
     	return ResponseEntity.ok(orderResponseDto);
     }
     //주문상태변경
-	@PatchMapping("change/{orderId}/{orderStatus}")
+	@PatchMapping("changeOrderStatus/{orderId}/{orderStatus}")
 	public ResponseEntity<OrderDto> changeOrderStatus(@PathVariable Long orderId, @PathVariable OrderStatus orderStatus) {
 		OrderDto orderResponseDto= new OrderDto();
 		return ResponseEntity.ok(orderResponseDto);
 	}
 	//주문수량변경
-	@PatchMapping("change/{orderId}/{quantity}")
+	@PatchMapping("changeQuantity/{orderId}/{quantity}")
 	public ResponseEntity<OrderDto> changeOrderQuantity(@PathVariable Long orderId, @PathVariable int quantity) {
 		OrderDto orderResponseDto= new OrderDto();
 		return ResponseEntity.ok(orderResponseDto);
