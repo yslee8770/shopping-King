@@ -1,4 +1,4 @@
-package com.yslee.shopping.test;
+package com.shopping;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

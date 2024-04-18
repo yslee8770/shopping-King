@@ -1,4 +1,4 @@
-package com.yslee.shopping;
+package com.shopping;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
