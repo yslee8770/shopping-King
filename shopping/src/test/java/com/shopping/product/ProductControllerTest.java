@@ -41,28 +41,27 @@ public class ProductControllerTest {
                                 .description("Test Description")
                                 .build();
     }
-
     @Test
     public void testProductList() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/product/list"))
                .andExpect(MockMvcResultMatchers.status().isOk())
-               .andExpect(MockMvcResultMatchers.content().json("[{\"productName\":\"test\"}]"))
+               .andExpect(MockMvcResultMatchers.content().json("[{\"productName\":\"Test Product\"}]"))
                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void testProductDetail() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/product/detail/{productId}", testProduct.getProductId()))
-//               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.productId").value(testProduct.getProductId()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.productName").value(testProduct.getProductName()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.stockQuantity").value(testProduct.getStockQuantity()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.salesRate").value(testProduct.getSalesRate()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.category").value(testProduct.getCategory()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(testProduct.getPrice()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.discountRate").value(testProduct.getDiscountRate()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value(testProduct.getStatusCode().toString()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(testProduct.getDescription()))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.productId").value(1L))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.productName").value("Test Product"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.stockQuantity").value(100))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.salesRate").value(50))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("Test Category"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(10000))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.discountRate").value(10))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.statusCode").value("SALE"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Test Description"))
                .andDo(MockMvcResultHandlers.print());
     }
 
@@ -73,7 +72,7 @@ public class ProductControllerTest {
                                               .content(objectMapper.writeValueAsString(testProduct)))
                .andExpect(MockMvcResultMatchers.status().isCreated())
                .andExpect(MockMvcResultMatchers.header().exists("Location"))
-//               .andExpect(MockMvcResultMatchers.content().json("{\"productId\":1}"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.productName").value("Test Product"))
                .andDo(MockMvcResultHandlers.print());
     }
 
@@ -84,7 +83,7 @@ public class ProductControllerTest {
                                               .content(objectMapper.writeValueAsString(testProduct)))
                .andExpect(MockMvcResultMatchers.status().isOk())
                .andExpect(MockMvcResultMatchers.header().exists("Location"))
-//               .andExpect(MockMvcResultMatchers.content().json("{\"productId\":1}"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.productName").value("Test Product"))
                .andDo(MockMvcResultHandlers.print());
     }
 

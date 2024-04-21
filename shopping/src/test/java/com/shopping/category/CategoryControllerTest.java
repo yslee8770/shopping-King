@@ -1,5 +1,5 @@
 package com.shopping.category;
-
+import static org.hamcrest.Matchers.is;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.category.dto.CategoryDto;
 import com.shopping.common.useStatus;
@@ -35,31 +35,35 @@ public class CategoryControllerTest {
                                   .build();
     }
 
+
     @Test
     public void testCategoryList() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/category/list"))
                .andExpect(MockMvcResultMatchers.status().isOk())
-               .andExpect(MockMvcResultMatchers.content().json("[]")); // 빈 리스트를 반환 예상
+               .andExpect(MockMvcResultMatchers.jsonPath("$.[0].categoryId", is(1)))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.[0].name", is("Sample Category")))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.[0].status", is("USE")));
     }
 
     @Test
     public void testCategoryDetail() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/category/detail/{categoryId}", testCategory.getCategoryId()))
-               .andExpect(MockMvcResultMatchers.status().isOk());
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.categoryId").value(testCategory.getCategoryId()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(testCategory.getName()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(testCategory.getStatus().toString()));
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.categoryId", is(1)))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Sample Category")))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.status", is("USE")));
     }
 
     @Test
     public void testUpdateCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/category/change")
-                                              .contentType(MediaType.APPLICATION_JSON)
-                                              .content(objectMapper.writeValueAsString(testCategory)))
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(testCategory)))
                .andExpect(MockMvcResultMatchers.status().isOk())
-               .andExpect(MockMvcResultMatchers.header().exists("Location")); // Location 헤더가 존재하는지 확인
+               .andExpect(MockMvcResultMatchers.header().exists("Location"))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Test Category")))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.status", is("USE")));
     }
-
     @Test
     public void testDeleteCategory() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/category/delete/{categoryId}", testCategory.getCategoryId()))

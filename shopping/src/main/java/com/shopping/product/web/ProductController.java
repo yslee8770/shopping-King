@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.shopping.product.dto.ProductRequestDto;
+import com.shopping.common.ProductStatus;
 import com.shopping.product.dto.ProductDto;
 
 @RestController
@@ -26,16 +27,33 @@ public class ProductController {
 	@GetMapping(value =  "/list" )
 	 public ResponseEntity<List<ProductDto>> productList(@ModelAttribute ProductRequestDto productRequestDto) {
 		List<ProductDto> products = new ArrayList<ProductDto>();
-		products.add(ProductDto.builder()
-				.productName("test")
-				.build()
-				);
+		 products.add(ProductDto.builder()
+	                .productName("Test Product")
+	                .productId(1L)
+	                .stockQuantity(100)
+	                .salesRate(50)
+	                .category("Test Category")
+	                .price(10000)
+	                .discountRate(10)
+	                .statusCode(ProductStatus.SALE)
+	                .description("Test Description")
+	                .build());
 		return ResponseEntity.ok(products);
 	}
 	//상품상세조회
 	@GetMapping("/detail/{productId}")
-	public ResponseEntity<ProductDto> productDetail(@PathVariable String productId) {
-		ProductDto product = new ProductDto();
+	public ResponseEntity<ProductDto> productDetail(@PathVariable Long productId) {
+		  ProductDto product = ProductDto.builder()
+	                .productName("Test Product")
+	                .productId(productId)
+	                .stockQuantity(100)
+	                .salesRate(50)
+	                .category("Test Category")
+	                .price(10000)
+	                .discountRate(10)
+	                .statusCode(ProductStatus.SALE)
+	                .description("Test Description")
+	                .build();
 		return ResponseEntity.ok(product);
 	}
 	
@@ -48,7 +66,8 @@ public class ProductController {
 	                .buildAndExpand(productRequestDto.getProductId())
 		            .toUri();
 		  //inset로직
-		  ProductDto productResponseDto = new ProductDto();
+		  ProductDto productResponseDto = productRequestDto;
+
 		  return ResponseEntity.created(location).body(productResponseDto);
 	}
 	//상품 변경
@@ -60,7 +79,7 @@ public class ProductController {
 	                .buildAndExpand(productRequestDto.getProductId())
 		            .toUri();
 		//update로직
-		ProductDto productResponseDto = new ProductDto();
+		  ProductDto productResponseDto = productRequestDto;
 		  
 		return ResponseEntity.ok().location(location).body(productResponseDto);
 	}

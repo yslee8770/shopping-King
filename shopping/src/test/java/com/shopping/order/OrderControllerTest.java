@@ -1,5 +1,5 @@
 package com.shopping.order;
-
+import static org.hamcrest.Matchers.is;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.common.OrderStatus;
 import com.shopping.order.dto.OrderDto;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
@@ -55,54 +54,63 @@ public class OrderControllerTest {
         orderList.add(testOrder);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/order/add")
-                                              .contentType(MediaType.APPLICATION_JSON)
-                                              .content(objectMapper.writeValueAsString(orderList)))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.content().json("[]"))
-               .andDo(MockMvcResultHandlers.print());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(orderList)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].memberId", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].productDto.productName", is("TestProduct")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].quantity", is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].price", is(20000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderStatus", is("PAYMENT")));
     }
 
     @Test
     public void testFindOrderList() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/order/list/{memberId}", testOrder.getMemberId()))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.content().json("[]"))
-               .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].memberId", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].productDto.productName", is("TestProduct")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].quantity", is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].price", is(20000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderStatus", is("PAYMENT")));
     }
 
     @Test
     public void testFindOrderDetail() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/order/detail/{orderId}", 1L))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.memberId").value(testOrder.getMemberId()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.quantity").value(testOrder.getQuantity()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(testOrder.getPrice()))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus").value(testOrder.getOrderStatus().toString()))
-               .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(20000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("PAYMENT")));
     }
 
     @Test
     public void testChangeOrderStatus() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.patch("/order/changeOrderStatus/{orderId}/{orderStatus}", 1L, OrderStatus.SHIPPING))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.orderId").value(1L))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus").value(OrderStatus.SHIPPING.toString()))
-               .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(20000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("SHIPPING")));
     }
 
     @Test
     public void testChangeOrderQuantity() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.patch("/order/changeQuantity/{orderId}/{quantity}", 1L, 3))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.orderId").value(1L))
-//               .andExpect(MockMvcResultMatchers.jsonPath("$.quantity").value(3))
-               .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(30000)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("PAYMENT")));
     }
 
     @Test
     public void testDeleteOrder() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/order/cancel/{orderId}", 1L))
-               .andExpect(MockMvcResultMatchers.status().isNoContent())
-               .andDo(MockMvcResultHandlers.print());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

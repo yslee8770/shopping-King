@@ -3,7 +3,7 @@ package com.shopping.cart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
+import static org.hamcrest.Matchers.is;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,20 +50,43 @@ public class CartControllerTest {
     public void testCartList() throws Exception {
         mockMvc.perform(get("/cart/list/{memberId}", 1L)
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-//            .andExpect(jsonPath("$.[0].productDto.discountPrice", is(10000)))
-//            .andExpect(jsonPath("$.[0].productDto.price", is(12000)))
-//            .andExpect(jsonPath("$.[0].memberId", is(1)))
-//            .andExpect(jsonPath("$.[0].quantity", is(2)))
-            .andDo(print());
+	        .andExpect(jsonPath("$.[0].productDto.productName", is("Sample Product")))
+	        .andExpect(jsonPath("$.[0].productDto.productId", is(1)))
+	        .andExpect(jsonPath("$.[0].productDto.stockQuantity", is(10)))
+	        .andExpect(jsonPath("$.[0].productDto.salesRate", is(5)))
+	        .andExpect(jsonPath("$.[0].productDto.category", is("Sample Category")))
+	        .andExpect(jsonPath("$.[0].productDto.price", is(12000)))
+	        .andExpect(jsonPath("$.[0].productDto.discountRate", is(20)))
+	        .andExpect(jsonPath("$.[0].productDto.registrationDate").exists())
+	        .andExpect(jsonPath("$.[0].productDto.statusCode", is("SALE")))
+	        .andExpect(jsonPath("$.[0].productDto.description", is("Sample Description")))
+	        .andExpect(jsonPath("$.[0].cartId", is(1)))
+	        .andExpect(jsonPath("$.[0].memberId", is(1)))
+	        .andExpect(jsonPath("$.[0].quantity", is(2)))
+	        .andExpect(jsonPath("$.[0].price", is(24000)))
+	        .andDo(print());
     }
 
     @Test
     public void testAddCart() throws Exception {
         mockMvc.perform(post("/cart/add/{memberId}/{productId}", 1L, 1L)
             .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-            .andDo(print());
+            .andExpect(status().isOk())
+	        .andExpect(jsonPath("$.[0].productDto.productName", is("Sample Product")))
+	        .andExpect(jsonPath("$.[0].productDto.productId", is(1)))
+	        .andExpect(jsonPath("$.[0].productDto.stockQuantity", is(10)))
+	        .andExpect(jsonPath("$.[0].productDto.salesRate", is(5)))
+	        .andExpect(jsonPath("$.[0].productDto.category", is("Sample Category")))
+	        .andExpect(jsonPath("$.[0].productDto.price", is(12000)))
+	        .andExpect(jsonPath("$.[0].productDto.discountRate", is(20)))
+	        .andExpect(jsonPath("$.[0].productDto.registrationDate").exists())
+	        .andExpect(jsonPath("$.[0].productDto.statusCode", is("SALE")))
+	        .andExpect(jsonPath("$.[0].productDto.description", is("Sample Description")))
+	        .andExpect(jsonPath("$.[0].cartId", is(1)))
+	        .andExpect(jsonPath("$.[0].memberId", is(1)))
+	        .andExpect(jsonPath("$.[0].quantity", is(2)))
+	        .andExpect(jsonPath("$.[0].price", is(24000)))
+	        .andDo(print());
     }
 
     @Test
