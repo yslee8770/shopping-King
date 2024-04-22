@@ -3,8 +3,8 @@ HELP.md
 build/
 bin/
 .settings/
-.classpath/
-.project/
+.classpath
+.project
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

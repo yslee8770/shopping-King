@@ -1,6 +1,6 @@
 package com.shopping.common;
 
 public enum ProductStatus {
-	//판매,판매중단
-	SALE,DISCONTINUED
+  // 판매,판매중단
+  SALE, DISCONTINUED
 }
