@@ -1,1 +1,2 @@
 rootProject.name = 'shopping-King'
+include 'shopping-King-api'
