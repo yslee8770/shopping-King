@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.shopping.common.OrderStatus;
 import com.shopping.order.dto.OrderDto;
+import com.shopping.order.service.OrderService;
 import com.shopping.product.dto.ProductDto;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
+  private OrderService orderService;
+
   @PostMapping("/add")
   public ResponseEntity<List<OrderDto>> addNewOrder(@RequestBody List<OrderDto> orderRequestDtos) {
     List<OrderDto> ordeResponseDtos = new ArrayList<OrderDto>();
@@ -38,32 +43,32 @@ public class OrderController {
 
   @GetMapping("/list/{memberId}")
   public ResponseEntity<List<OrderDto>> findOrderList(@PathVariable Long memberId) {
-    List<OrderDto> orderDtos = new ArrayList<OrderDto>();
-    orderDtos
-        .add(OrderDto
-            .builder()
-            .memberId(memberId)
-            .productDto(ProductDto.builder().productName("TestProduct").price(10000).build())
-            .orderedTime(LocalDateTime.now())
-            .quantity(2)
-            .price(20000)
-            .orderStatus(OrderStatus.PAYMENT)
-            .build());
-    return ResponseEntity.ok(orderDtos);
+    // List<OrderDto> orderDtos = new ArrayList<OrderDto>();
+    // orderDtos
+    // .add(OrderDto
+    // .builder()
+    // .memberId(memberId)
+    // .productDto(ProductDto.builder().productName("TestProduct").price(10000).build())
+    // .orderedTime(LocalDateTime.now())
+    // .quantity(2)
+    // .price(20000)
+    // .orderStatus(OrderStatus.PAYMENT)
+    // .build());
+    return ResponseEntity.ok(orderService.findOrdersByMemberId(memberId));
   }
 
   @GetMapping("/detail/{orderId}")
   public ResponseEntity<OrderDto> findOrderDetail(@PathVariable Long orderId) {
-    OrderDto orderResponseDto = OrderDto
-        .builder()
-        .memberId(1L)
-        .productDto(ProductDto.builder().productName("TestProduct").price(10000).build())
-        .orderedTime(LocalDateTime.now())
-        .quantity(2)
-        .price(20000)
-        .orderStatus(OrderStatus.PAYMENT)
-        .build();
-    return ResponseEntity.ok(orderResponseDto);
+    // OrderDto orderResponseDto = OrderDto
+    // .builder()
+    // .memberId(1L)
+    // .productDto(ProductDto.builder().productName("TestProduct").price(10000).build())
+    // .orderedTime(LocalDateTime.now())
+    // .quantity(2)
+    // .price(20000)
+    // .orderStatus(OrderStatus.PAYMENT)
+    // .build();
+    return ResponseEntity.ok(orderService.findOrdersByOrderId(orderId));
   }
 
   @PatchMapping("changeOrderStatus/{orderId}/{orderStatus}")

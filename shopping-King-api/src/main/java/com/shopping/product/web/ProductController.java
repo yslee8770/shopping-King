@@ -17,10 +17,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.shopping.common.ProductStatus;
 import com.shopping.product.dto.ProductDto;
 import com.shopping.product.dto.ProductRequestDto;
+import com.shopping.product.service.ProductService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/product")
+@RequiredArgsConstructor
 public class ProductController {
+  private final ProductService productService;
+
   @GetMapping(value = "/list")
   public ResponseEntity<List<ProductDto>> findProductList(
       @ModelAttribute ProductRequestDto productRequestDto) {
@@ -38,7 +43,8 @@ public class ProductController {
             .statusCode(ProductStatus.SALE)
             .description("Test Description")
             .build());
-    return ResponseEntity.ok(products);
+    return ResponseEntity.ok(productService.findAllProducts());
+
   }
 
   @GetMapping("/detail/{productId}")
