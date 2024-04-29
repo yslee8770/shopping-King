@@ -1,5 +1,5 @@
 package com.shopping.common;
 
-public enum useStatus {
+public enum UseStatus {
   USE, UNUSED
 }

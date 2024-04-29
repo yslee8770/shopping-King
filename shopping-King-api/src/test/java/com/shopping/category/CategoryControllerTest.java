@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.category.dto.CategoryDto;
-import com.shopping.common.useStatus;
+import com.shopping.common.UseStatus;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,7 +30,7 @@ public class CategoryControllerTest {
   @BeforeEach
   public void setup() {
     testCategory =
-        CategoryDto.builder().categoryId(1L).name("Test Category").status(useStatus.USE).build();
+        CategoryDto.builder().categoryId(1L).name("Test Category").status(UseStatus.USE).build();
   }
 
   @Test

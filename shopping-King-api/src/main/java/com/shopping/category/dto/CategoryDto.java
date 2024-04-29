@@ -1,6 +1,6 @@
 package com.shopping.category.dto;
 
-import com.shopping.common.useStatus;
+import com.shopping.common.UseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +17,5 @@ public class CategoryDto {
   // 카테고리 이름
   private String name;
   // 카테고리 상태
-  private useStatus status;
+  private UseStatus status;
 }
