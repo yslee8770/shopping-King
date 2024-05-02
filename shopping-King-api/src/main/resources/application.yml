@@ -2,7 +2,7 @@ spring:
   application:
     name: shopping
   datasource:
-    url: jdbc:h2:tcp://localhost/~/studyjpa
+    url: jdbc:h2:tcp://localhost/~/shoppingking
     driver-class-name: org.h2.Driver
     username: test
     password: test

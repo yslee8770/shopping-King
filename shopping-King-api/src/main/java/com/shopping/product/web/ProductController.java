@@ -1,22 +1,19 @@
 package com.shopping.product.web;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.shopping.common.ProductStatus;
-import com.shopping.product.dto.ProductDto;
+import com.shopping.common.mapper.ProductMapper;
 import com.shopping.product.dto.ProductRequestDto;
+import com.shopping.product.dto.ProductResponseDto;
 import com.shopping.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,64 +23,34 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
   private final ProductService productService;
 
-  @GetMapping(value = "/list")
-  public ResponseEntity<List<ProductDto>> findProductList(
-      @ModelAttribute ProductRequestDto productRequestDto) {
-    List<ProductDto> products = new ArrayList<ProductDto>();
-    products
-        .add(ProductDto
-            .builder()
-            .productName("Test Product")
-            .productId(1L)
-            .stockQuantity(100)
-            .salesRate(50)
-            .category("Test Category")
-            .price(10000)
-            .discountRate(10)
-            .statusCode(ProductStatus.SALE)
-            .description("Test Description")
-            .build());
-    return ResponseEntity.ok(productService.findAllProducts());
-
+  @GetMapping(value = "/list/{categoryId}")
+  public ResponseEntity<List<ProductResponseDto>> findProductList(@PathVariable Long categoryId) {
+    return ResponseEntity
+        .ok(productService
+            .findCategoryList(categoryId)
+            .stream()
+            .map(ProductMapper::productToProductDto)
+            .collect(Collectors.toList()));
   }
 
   @GetMapping("/detail/{productId}")
-  public ResponseEntity<ProductDto> findProductDetail(@PathVariable Long productId) {
-    ProductDto product = ProductDto
-        .builder()
-        .productName("Test Product")
-        .productId(productId)
-        .stockQuantity(100)
-        .salesRate(50)
-        .category("Test Category")
-        .price(10000)
-        .discountRate(10)
-        .statusCode(ProductStatus.SALE)
-        .description("Test Description")
-        .build();
-    return ResponseEntity.ok(product);
+  public ResponseEntity<ProductResponseDto> findProductDetail(@PathVariable Long productId) {
+    return ResponseEntity
+        .ok(ProductMapper.productToProductDto(productService.findProudctByProductId(productId)));
   }
 
   @PostMapping("/add")
-  public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productRequestDto) {
-    URI location = ServletUriComponentsBuilder
-        .fromCurrentRequest()
-        .path("/detail/{productId}")
-        .buildAndExpand(productRequestDto.getProductId())
-        .toUri();
-    ProductDto productResponseDto = productRequestDto;
-    return ResponseEntity.created(location).body(productResponseDto);
+  public ResponseEntity<ProductResponseDto> addProduct(
+      @RequestBody ProductRequestDto productRequestDto) {
+    return ResponseEntity
+        .ok(ProductMapper.productToProductDto(productService.changeProduct(productRequestDto)));
   }
 
   @PutMapping("/change")
-  public ResponseEntity<ProductDto> changeProduct(@RequestBody ProductDto productRequestDto) {
-    URI location = ServletUriComponentsBuilder
-        .fromCurrentRequest()
-        .path("/detail/{productId}")
-        .buildAndExpand(productRequestDto.getProductId())
-        .toUri();
-    ProductDto productResponseDto = productRequestDto;
-    return ResponseEntity.ok().location(location).body(productResponseDto);
+  public ResponseEntity<ProductResponseDto> changeProduct(
+      @RequestBody ProductRequestDto productRequestDto) {
+    return ResponseEntity
+        .ok(ProductMapper.productToProductDto(productService.changeProduct(productRequestDto)));
   }
 
   @DeleteMapping("/delete/{productId}")

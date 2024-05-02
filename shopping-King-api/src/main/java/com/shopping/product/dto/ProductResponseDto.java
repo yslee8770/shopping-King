@@ -1,7 +1,7 @@
 package com.shopping.product.dto;
 
 import java.time.LocalDateTime;
-import com.shopping.common.ProductStatus;
+import com.shopping.common.DeleteAt;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductResponseDto {
   // 상품명
   private String productName;
   // 상품id
@@ -29,16 +29,10 @@ public class ProductDto {
   // 할인가
   private Integer discountPrice;
   // 상품등록일자
-  private LocalDateTime registrationDate;
+  private LocalDateTime registDt;
   // 상품 상태코드
-  private ProductStatus statusCode;
+  private DeleteAt deleteAt;
   // 상품 설명
   private String description;
-
-  public int getDiscountPrice() {
-    return discountPrice != null ? discountPrice : price;
-  }
-
-
 
 }
