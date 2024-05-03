@@ -3,12 +3,20 @@ package com.shopping.order.dto;
 import java.time.LocalDateTime;
 import com.shopping.common.OrderStatus;
 import com.shopping.product.entity.Product;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class OrderResponseDtd {
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderResponseDto {
 
   private Long orderId;
 
-  private LocalDateTime ordereDt;
+  private LocalDateTime orderDt;
 
   private String address;
 

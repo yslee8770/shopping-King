@@ -1,6 +1,8 @@
 package com.shopping.order.web;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.shopping.common.mapper.OrderMapper;
 import com.shopping.order.dto.OrderRequestDto;
+import com.shopping.order.dto.OrderResponseDto;
 import com.shopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,29 +26,30 @@ public class OrderController {
 
 
   @GetMapping("/list/{memberId}")
-  public ResponseEntity<List<OrderRequestDto>> findOrderList(@PathVariable Long memberId) {
-    return ResponseEntity.ok(null);
-    // return ResponseEntity.ok(orderService.findOrdersByMemberId(memberId));
+  public ResponseEntity<List<OrderResponseDto>> findOrderList(@PathVariable Long memberId) {
+    return ResponseEntity
+        .ok(orderService
+            .findOrdersByMemberId(memberId)
+            .stream()
+            .map(OrderMapper::ordertoOrderResponseDto)
+            .collect(Collectors.toList()));
   }
 
   @GetMapping("/detail/{orderId}")
-  public ResponseEntity<OrderRequestDto> findOrderDetail(@PathVariable Long orderId) {
-    // OrderDto orderResponseDto = OrderDto
-    // .builder()
-    // .memberId(1L)
-    // .productDto(ProductDto.builder().productName("TestProduct").price(10000).build())
-    // .orderedTime(LocalDateTime.now())
-    // .quantity(2)
-    // .price(20000)
-    // .orderStatus(OrderStatus.PAYMENT)
-    // .build();
-    return ResponseEntity.ok(orderService.findOrdersByOrderId(orderId));
+  public ResponseEntity<OrderResponseDto> findOrderDetail(@PathVariable Long orderId) {
+    return ResponseEntity
+        .ok(OrderMapper.ordertoOrderResponseDto(orderService.findOrdersByOrderId(orderId)));
   }
 
   @PostMapping("/add")
-  public ResponseEntity<List<OrderRequestDto>> addNewOrder(
+  public ResponseEntity<List<OrderResponseDto>> addOrder(
       @RequestBody List<OrderRequestDto> orderRequestDtos) {
-    return ResponseEntity.ok(null);
+    List<OrderResponseDto> responseList = new ArrayList<OrderResponseDto>();
+    for (OrderRequestDto orderRequestDto : orderRequestDtos) {
+      responseList
+          .add(OrderMapper.ordertoOrderResponseDto(orderService.changeOrder(orderRequestDto)));
+    }
+    return ResponseEntity.ok(responseList);
   }
 
   @PostMapping("/change")
