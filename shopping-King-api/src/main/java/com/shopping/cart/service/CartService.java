@@ -1,6 +1,7 @@
 package com.shopping.cart.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.cart.dto.CartChangeDto;
 import com.shopping.cart.entity.Cart;
@@ -17,7 +18,9 @@ public class CartService {
   private final ProductRepository productRepository;
 
   public List<Cart> findCartsByMemberId(Long memberId) {
-    return cartRepository.findByMemberId(memberId);
+    return Optional
+        .ofNullable(cartRepository.findByMemberId(memberId))
+        .orElseThrow(() -> new RuntimeException("Cart not found for member with id: " + memberId));
   }
 
   public Cart saveCart(CartChangeDto cartChangeDto) {
@@ -27,6 +30,4 @@ public class CartService {
             "Product not found with id: " + cartChangeDto.getProductId()));
     return cartRepository.save(CartMapper.cartChangeDtoToCart(cartChangeDto, product));
   }
-
-
 }

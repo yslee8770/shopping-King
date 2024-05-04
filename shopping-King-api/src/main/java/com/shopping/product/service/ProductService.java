@@ -1,6 +1,7 @@
 package com.shopping.product.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.category.repository.CategoryRepository;
 import com.shopping.common.mapper.ProductMapper;
@@ -17,8 +18,16 @@ public class ProductService {
   private final CategoryRepository categoryRepository;
 
   public List<Product> findCategoryList(Long categoryId) {
-    return (categoryId == null) ? productRepository.findAll()
-        : productRepository.findAllByCategoryId(categoryId);
+    return
+
+    (categoryId == null)
+        ? Optional
+            .ofNullable(productRepository.findAll())
+            .orElseThrow(() -> new RuntimeException("No Product "))
+        : Optional
+            .ofNullable(productRepository.findAllByCategoryId(categoryId))
+            .orElseThrow(
+                () -> new RuntimeException("Product not found with categoryId: " + categoryId));
   }
 
   public Product findProudctByProductId(Long productId) {

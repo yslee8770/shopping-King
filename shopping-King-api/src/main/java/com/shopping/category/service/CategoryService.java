@@ -1,6 +1,7 @@
 package com.shopping.category.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.category.dto.CategoryDto;
 import com.shopping.category.entity.Category;
@@ -15,7 +16,9 @@ public class CategoryService {
   private CategoryRepository categoryRepository;
 
   public List<Category> findCategoryList() {
-    return categoryRepository.findAll();
+    return Optional
+        .ofNullable(categoryRepository.findAll())
+        .orElseThrow(() -> new RuntimeException("No Category"));
   }
 
   public Category findCategoryByCategoryId(Long categoryId) {
@@ -28,6 +31,4 @@ public class CategoryService {
   public Category saveCategory(CategoryDto categoryDto) {
     return categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryDto));
   }
-
-
 }

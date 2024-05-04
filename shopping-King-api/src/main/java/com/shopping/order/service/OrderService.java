@@ -1,6 +1,7 @@
 package com.shopping.order.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.common.mapper.OrderMapper;
 import com.shopping.member.repository.MemberRepository;
@@ -19,7 +20,9 @@ public class OrderService {
   private final ProductRepository productRepository;
 
   public List<Orders> findOrdersByMemberId(Long memberId) {
-    return orderRepository.findByMemberId(memberId);
+    return Optional
+        .ofNullable(orderRepository.findByMemberId(memberId))
+        .orElseThrow(() -> new RuntimeException("Order not found with memberId: " + memberId));
   }
 
   public Orders findOrdersByOrderId(Long orderId) {
@@ -41,5 +44,4 @@ public class OrderService {
                     .orElseThrow(() -> new EntityNotFoundException(
                         "Product not found with id: " + orderRequestDto.getProductId()))));
   }
-
 }
