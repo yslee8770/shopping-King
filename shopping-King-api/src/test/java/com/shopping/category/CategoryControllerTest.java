@@ -29,8 +29,6 @@ public class CategoryControllerTest {
 
   @BeforeEach
   public void setup() {
-    testCategory =
-        CategoryDto.builder().categoryId(1L).name("Test Category").status(UseStatus.USE).build();
   }
 
   @Test

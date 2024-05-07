@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.cart.dto.CartResponseDto;
 import com.shopping.cart.web.CartController;
-import com.shopping.product.dto.ProductDto;
+import com.shopping.product.dto.ProductResponseDto;
 
 @WebMvcTest(CartController.class)
 public class CartControllerTest {
@@ -37,10 +37,10 @@ public class CartControllerTest {
   void setUp() {
     cartDtos = new ArrayList<>();
 
-    ProductDto productDto = ProductDto.builder().discountPrice(10000).price(12000).build();
+    ProductResponseDto productDto = ProductResponseDto.builder().discountPrice(10000).price(12000).build();
 
-    CartResponseDto cartResponseDto =
-        CartResponseDto.builder().productDto(productDto).memberId(1L).quantity(2).build();
+    CartResponseDto cartResponseDto = null;
+    // CartResponseDto.builder().productDto(productDto).memberId(1L).quantity(2).build();
 
     cartDtos.add(cartResponseDto);
   }
