@@ -52,7 +52,7 @@ public class CartServiceIntegrationTest {
         .memberId(1L)
         .productId(1L)
         .quantity(2)
-        .pricce(100)
+        .price(100)
         .deleteAt(DeleteAt.N)
         .build();
 

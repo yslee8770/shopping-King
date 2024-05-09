@@ -16,9 +16,7 @@ public class CategoryService {
   private CategoryRepository categoryRepository;
 
   public List<Category> findCategoryList() {
-    return Optional
-        .ofNullable(categoryRepository.findAll())
-        .orElseThrow(() -> new RuntimeException("No Category"));
+    return categoryRepository.findAll();
   }
 
   public Category findCategoryByCategoryId(Long categoryId) {
