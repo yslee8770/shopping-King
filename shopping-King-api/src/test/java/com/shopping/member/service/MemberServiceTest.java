@@ -17,10 +17,6 @@ import com.shopping.member.repository.MemberRepository;
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
-
-  @Mock
-  private MemberRepository memberRepository;
-
   @InjectMocks
   private MemberService memberService;
 

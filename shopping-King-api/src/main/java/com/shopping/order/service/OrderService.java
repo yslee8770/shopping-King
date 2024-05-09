@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-  private OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
 

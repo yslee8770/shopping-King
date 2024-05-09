@@ -1,7 +1,6 @@
 package com.shopping.category.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.category.dto.CategoryDto;
 import com.shopping.category.entity.Category;
@@ -13,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-  private CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
   public List<Category> findCategoryList() {
     return categoryRepository.findAll();

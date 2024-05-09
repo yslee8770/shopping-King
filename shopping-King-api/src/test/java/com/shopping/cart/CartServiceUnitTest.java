@@ -36,19 +36,15 @@ class CartServiceUnitTest {
   @Test
   @DisplayName("카트 조회")
   void findCartsByMemberId() {
-    // Mock data
     Long memberId = 1L;
     Cart cart1 = Cart.builder().id(1L).memberId(memberId).build();
     Cart cart2 = Cart.builder().id(2L).memberId(memberId).build();
     List<Cart> carts = Arrays.asList(cart1, cart2);
 
-    // Stubbing the repository method
     when(cartRepository.findByMemberId(memberId)).thenReturn(carts);
 
-    // Call the service method
     List<Cart> result = cartService.findCartsByMemberId(memberId);
 
-    // Verify the result
     assertEquals(carts, result);
   }
 
@@ -75,14 +71,11 @@ class CartServiceUnitTest {
             .deleteAt(DeleteAt.N)
             .build();
 
-    // Stubbing the repository methods
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
     when(cartRepository.save(any(Cart.class))).thenReturn(cart);
 
-    // Call the service method
     Cart savedCart = cartService.saveCart(cartChangeDto);
 
-    // Verify the result
     assertNotNull(savedCart);
     assertEquals(cart.getId(), savedCart.getId());
     assertEquals(cart.getMemberId(), savedCart.getMemberId());

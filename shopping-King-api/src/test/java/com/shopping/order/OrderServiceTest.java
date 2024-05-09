@@ -1,127 +1,152 @@
 package com.shopping.order;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.common.OrderStatus;
-import com.shopping.order.dto.OrderRequestDto;
-import com.shopping.product.dto.ProductResponseDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import com.shopping.order.service.OrderService;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.Matchers.is;
+import com.shopping.common.OrderStatus;
+import com.shopping.member.entity.Member;
+import com.shopping.member.repository.MemberRepository;
+import com.shopping.order.dto.OrderRequestDto;
+import com.shopping.order.entity.Orders;
+import com.shopping.order.repository.OrderRepository;
+import com.shopping.product.entity.Product;
+import com.shopping.product.repository.ProductRepository;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@DisplayName("OrderService 테스트")
 public class OrderServiceTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Mock
+  private OrderRepository orderRepository;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Mock
+  private MemberRepository memberRepository;
 
-  private OrderRequestDto testOrder;
+  @Mock
+  private ProductRepository productRepository;
+
+  @InjectMocks
+  private OrderService orderService;
 
   @BeforeEach
-  public void setup() {
-    ProductResponseDto productDto =
-        ProductResponseDto.builder().productName("TestProduct").price(10000).build();
-    //
-    // testOrder = OrderRequestDto
-    // .builder()
-    // .memberId(1L)
-    // .orderedTime(LocalDateTime.now())
-    // .quantity(2)
-    // .price(20000)
-    // .orderStatus(OrderStatus.PAYMENT)
-    // .build();
+  public void setUp() {
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  public void testCreateNewOrder() throws Exception {
-    List<OrderRequestDto> orderList = new ArrayList<>();
-    orderList.add(testOrder);
+  @DisplayName("특정 회원의 주문 목록 조회 - 회원이 존재하는 경우")
+  public void testFindOrdersByMemberId_WhenMemberExists() {
+    Long memberId = 1L;
+    Member member = Member.builder().id(memberId).name("User1").build();
+    List<Orders> orders = new ArrayList<>();
+    orders.add(Orders.builder().id(1L).member(member).orderDt(LocalDateTime.now()).build());
+    when(orderRepository.findByMemberId(memberId)).thenReturn(orders);
 
-    mockMvc
-        .perform(MockMvcRequestBuilders
-            .post("/order/add")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(orderList)))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].memberId", is(1)))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.[0].productDto.productName", is("TestProduct")))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].quantity", is(2)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].price", is(20000)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderStatus", is("PAYMENT")));
+    List<Orders> foundOrders = orderService.findOrdersByMemberId(memberId);
+
+    assertEquals(orders, foundOrders);
   }
 
   @Test
-  public void testFindOrderList() throws Exception {
-    mockMvc
-        .perform(MockMvcRequestBuilders.get("/order/list/{memberId}", testOrder.getMemberId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].memberId", is(1)))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("$.[0].productDto.productName", is("TestProduct")))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].quantity", is(2)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].price", is(20000)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.[0].orderStatus", is("PAYMENT")));
+  @DisplayName("특정 회원의 주문 목록 조회 - 회원이 존재하지 않는 경우")
+  public void testFindOrdersByMemberId_WhenMemberNotExists() {
+    Long memberId = 1L;
+    when(orderRepository.findByMemberId(memberId)).thenReturn(null);
+
+    assertThrows(RuntimeException.class, () -> {
+      orderService.findOrdersByMemberId(memberId);
+    });
   }
 
   @Test
-  public void testFindOrderDetail() throws Exception {
-    mockMvc
-        .perform(MockMvcRequestBuilders.get("/order/detail/{orderId}", 1L))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(2)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(20000)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("PAYMENT")));
+  @DisplayName("특정 주문 조회 - 주문이 존재하는 경우")
+  public void testFindOrdersByOrderId_WhenOrderExists() {
+    // Mock 데이터 생성
+    Long orderId = 1L;
+    Orders order = Orders.builder().id(orderId).orderDt(LocalDateTime.now()).build();
+    when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+
+    Orders foundOrder = orderService.findOrdersByOrderId(orderId);
+
+    assertEquals(order, foundOrder);
   }
 
   @Test
-  public void testChangeOrderStatus() throws Exception {
-    mockMvc
-        .perform(MockMvcRequestBuilders
-            .patch("/order/changeOrderStatus/{orderId}/{orderStatus}", 1L, OrderStatus.SHIPPING))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(2)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(20000)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("SHIPPING")));
+  @DisplayName("특정 주문 조회 - 주문이 존재하지 않는 경우")
+  public void testFindOrdersByOrderId_WhenOrderNotExists() {
+    Long orderId = 1L;
+    when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+    assertThrows(EntityNotFoundException.class, () -> {
+      orderService.findOrdersByOrderId(orderId);
+    });
   }
 
   @Test
-  public void testChangeOrderQuantity() throws Exception {
-    mockMvc
-        .perform(MockMvcRequestBuilders.patch("/order/changeQuantity/{orderId}/{quantity}", 1L, 3))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.memberId", is(1)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.productDto.productName", is("TestProduct")))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.quantity", is(3)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.price", is(30000)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus", is("PAYMENT")));
+  @DisplayName("주문 생성")
+  public void testChangeOrder() {
+    // Mock 데이터 생성
+    Long memberId = 1L;
+    Long productId = 1L;
+    OrderRequestDto orderRequestDto = OrderRequestDto.builder()
+            .memberId(memberId)
+            .productId(productId)
+            .quantity(1)
+            .price(10000)
+            .orderStatus(OrderStatus.PAYMENT)
+            .build();
+
+    Member member = Member.builder().id(memberId).name("User1").build();
+    Product product = Product.builder().id(productId).productNm("Product1").build();
+
+    Orders savedOrder = Orders.builder()
+            .id(1L)
+            .member(member)
+            .product(product)
+            .quantity(orderRequestDto.getQuantity())
+            .price(orderRequestDto.getPrice())
+            .orderDt(LocalDateTime.now())
+            .address("Address")
+            .orderStatus(orderRequestDto.getOrderStatus())
+            .build();
+
+    when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+    when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+    when(orderRepository.save(any())).thenAnswer(invocation -> {
+      Orders order = invocation.getArgument(0);
+      return Orders.builder()
+              .id(1L) // 임의의 값 설정
+              .member(order.getMember())
+              .product(order.getProduct())
+              .quantity(order.getQuantity())
+              .price(order.getPrice())
+              .orderDt(order.getOrderDt())
+              .address(order.getAddress())
+              .orderStatus(order.getOrderStatus())
+              .build();
+    });
+
+    Orders result = orderService.changeOrder(orderRequestDto);
+
+    assertNotNull(result);
+    assertEquals(memberId, result.getMember().getId());
+    assertEquals(productId, result.getProduct().getId());
+    assertEquals(orderRequestDto.getQuantity(), result.getQuantity());
+    assertEquals(orderRequestDto.getPrice(), result.getPrice());
+    assertEquals(orderRequestDto.getOrderStatus(), result.getOrderStatus());
   }
 
-  @Test
-  public void testDeleteOrder() throws Exception {
-    mockMvc
-        .perform(MockMvcRequestBuilders.delete("/order/cancel/{orderId}", 1L))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().string("1"))
-        .andDo(MockMvcResultHandlers.print());
-  }
+
 }

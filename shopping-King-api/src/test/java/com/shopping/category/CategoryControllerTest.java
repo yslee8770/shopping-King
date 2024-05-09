@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.category.dto.CategoryDto;
-import com.shopping.common.UseStatus;
 
 @SpringBootTest
 @AutoConfigureMockMvc
