@@ -7,6 +7,7 @@ import com.shopping.product.dto.ProductResponseDto;
 import com.shopping.product.entity.Product;
 
 public class ProductMapper {
+
   public static ProductResponseDto productToProductDto(Product product) {
     return product == null ? null
         : ProductResponseDto

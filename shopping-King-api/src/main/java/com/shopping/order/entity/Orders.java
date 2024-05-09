@@ -1,6 +1,5 @@
 package com.shopping.order.entity;
 
-import java.time.LocalDateTime;
 import com.shopping.common.OrderStatus;
 import com.shopping.member.entity.Member;
 import com.shopping.product.entity.Product;
@@ -13,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

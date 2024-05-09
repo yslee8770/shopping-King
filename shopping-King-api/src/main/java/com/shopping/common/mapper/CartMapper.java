@@ -6,8 +6,9 @@ import com.shopping.cart.entity.Cart;
 import com.shopping.product.entity.Product;
 
 public class CartMapper {
+
   public static CartResponseDto cartToCartResponseDto(Cart cart) {
-    return cart == null || cart.getProduct()==null ? null
+    return cart == null || cart.getProduct() == null ? null
         : CartResponseDto
             .builder()
             .cartId(cart.getId())
@@ -23,7 +24,7 @@ public class CartMapper {
   }
 
   public static Cart cartChangeDtoToCart(CartChangeDto cartChangeDto, Product product) {
-    return cartChangeDto == null || product==null ? null
+    return cartChangeDto == null || product == null ? null
         : Cart
             .builder()
             .memberId(cartChangeDto.getMemberId())

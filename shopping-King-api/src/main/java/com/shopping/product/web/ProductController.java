@@ -1,7 +1,12 @@
 package com.shopping.product.web;
 
+import com.shopping.common.mapper.ProductMapper;
+import com.shopping.product.dto.ProductRequestDto;
+import com.shopping.product.dto.ProductResponseDto;
+import com.shopping.product.service.ProductService;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.shopping.common.mapper.ProductMapper;
-import com.shopping.product.dto.ProductRequestDto;
-import com.shopping.product.dto.ProductResponseDto;
-import com.shopping.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
+
   private final ProductService productService;
 
   @GetMapping(value = "/list/{categoryId}")

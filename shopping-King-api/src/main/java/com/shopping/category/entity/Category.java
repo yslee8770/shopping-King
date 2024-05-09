@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
+
   @Id
   @GeneratedValue
   @Column(name = "category_id")

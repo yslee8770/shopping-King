@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestMemberDto {
+public class MemberRequestDto {
 
   @Nullable
   private Long id;

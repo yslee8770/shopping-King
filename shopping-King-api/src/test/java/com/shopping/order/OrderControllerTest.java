@@ -1,6 +1,11 @@
 package com.shopping.order;
 
 import static org.hamcrest.Matchers.is;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shopping.common.OrderStatus;
+import com.shopping.order.dto.OrderRequestDto;
+import com.shopping.product.dto.ProductResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.common.OrderStatus;
-import com.shopping.order.dto.OrderRequestDto;
-import com.shopping.product.dto.ProductResponseDto;
 
 @SpringBootTest
 @AutoConfigureMockMvc

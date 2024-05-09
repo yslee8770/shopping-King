@@ -1,17 +1,18 @@
 package com.shopping.category.service;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
 import com.shopping.category.dto.CategoryDto;
 import com.shopping.category.entity.Category;
 import com.shopping.category.repository.CategoryRepository;
 import com.shopping.common.mapper.CategoryMapper;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+
   private final CategoryRepository categoryRepository;
 
   public List<Category> findCategoryList() {

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class CartChangeDto {
+
   @Nullable
   private Long cartId;
   private Long memberId;

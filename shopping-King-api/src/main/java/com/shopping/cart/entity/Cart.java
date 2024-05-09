@@ -17,10 +17,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Cart {
+
   @Id
   @GeneratedValue
   @Column(name = "cart_id")
@@ -37,9 +38,10 @@ public class Cart {
   private int price;
 
   private int quantity;
-  
+
   @Enumerated(EnumType.STRING)
   @Column(name = "delete_at")
   private DeleteAt deleteAt;
+
 
 }

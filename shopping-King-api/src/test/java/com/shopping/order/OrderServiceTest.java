@@ -1,20 +1,10 @@
 package com.shopping.order;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import com.shopping.order.service.OrderService;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 import com.shopping.common.OrderStatus;
 import com.shopping.member.entity.Member;
@@ -22,8 +12,20 @@ import com.shopping.member.repository.MemberRepository;
 import com.shopping.order.dto.OrderRequestDto;
 import com.shopping.order.entity.Orders;
 import com.shopping.order.repository.OrderRepository;
+import com.shopping.order.service.OrderService;
 import com.shopping.product.entity.Product;
 import com.shopping.product.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 @DisplayName("OrderService 테스트")
 public class OrderServiceTest {
@@ -100,12 +102,12 @@ public class OrderServiceTest {
     Long memberId = 1L;
     Long productId = 1L;
     OrderRequestDto orderRequestDto = OrderRequestDto.builder()
-            .memberId(memberId)
-            .productId(productId)
-            .quantity(1)
-            .price(10000)
-            .orderStatus(OrderStatus.PAYMENT)
-            .build();
+        .memberId(memberId)
+        .productId(productId)
+        .quantity(1)
+        .price(10000)
+        .orderStatus(OrderStatus.PAYMENT)
+        .build();
 
     Member member = Member.builder().id(memberId).name("User1").build();
     Product product = Product.builder().id(productId).productNm("Product1").build();
@@ -115,15 +117,15 @@ public class OrderServiceTest {
     when(orderRepository.save(any())).thenAnswer(invocation -> {
       Orders order = invocation.getArgument(0);
       return Orders.builder()
-              .id(1L) // 임의의 값 설정
-              .member(order.getMember())
-              .product(order.getProduct())
-              .quantity(order.getQuantity())
-              .price(order.getPrice())
-              .orderDt(order.getOrderDt())
-              .address(order.getAddress())
-              .orderStatus(order.getOrderStatus())
-              .build();
+          .id(1L) // 임의의 값 설정
+          .member(order.getMember())
+          .product(order.getProduct())
+          .quantity(order.getQuantity())
+          .price(order.getPrice())
+          .orderDt(order.getOrderDt())
+          .address(order.getAddress())
+          .orderStatus(order.getOrderStatus())
+          .build();
     });
 
     Orders result = orderService.changeOrder(orderRequestDto);

@@ -42,22 +42,22 @@ class CartControllerTest {
   @DisplayName("장바구니 값이 있을때")
   void findCartListWithItems() throws Exception {
     Cart cart1 = Cart.builder()
-            .id(1L)
-            .memberId(1L)
-            .quantity(2)
-            .price(100)
-            .build();
+        .id(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
     List<Cart> cartList = Collections.singletonList(cart1);
 
     when(cartRepository.findByMemberId(1L)).thenReturn(cartList);
 
     mockMvc.perform(get("/cart/list/{memberId}", 1L))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].memberId").value(1))
-            .andExpect(jsonPath("$[0].quantity").value(2))
-            .andExpect(jsonPath("$[0].price").value(100));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].id").value(1))
+        .andExpect(jsonPath("$[0].memberId").value(1))
+        .andExpect(jsonPath("$[0].quantity").value(2))
+        .andExpect(jsonPath("$[0].price").value(100));
 
     verify(cartService, times(1)).findCartsByMemberId(1L);
   }
@@ -71,10 +71,10 @@ class CartControllerTest {
     when(cartRepository.findByMemberId(1L)).thenReturn(cartList);
 
     mockMvc.perform(get("/cart/list/{memberId}", 1L))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$").isEmpty());
 
     verify(cartService, times(1)).findCartsByMemberId(1L);
   }
@@ -83,29 +83,29 @@ class CartControllerTest {
   @DisplayName("장바구니 저장 성공")
   void saveCartSuccess() throws Exception {
     CartChangeDto cartChangeDto = CartChangeDto.builder()
-            .productId(1L)
-            .memberId(1L)
-            .quantity(2)
-            .price(100)
-            .build();
+        .productId(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
     Cart savedCart = Cart.builder()
-            .id(1L)
-            .memberId(1L)
-            .quantity(2)
-            .price(100)
-            .build();
+        .id(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
 
     when(cartService.saveCart(any(CartChangeDto.class))).thenReturn(savedCart);
 
     mockMvc.perform(put("/cart/change")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(cartChangeDto)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.memberId").value(1))
-            .andExpect(jsonPath("$.quantity").value(2))
-            .andExpect(jsonPath("$.price").value(100));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(cartChangeDto)))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.memberId").value(1))
+        .andExpect(jsonPath("$.quantity").value(2))
+        .andExpect(jsonPath("$.price").value(100));
 
     verify(cartService, times(1)).saveCart(any(CartChangeDto.class));
   }
@@ -114,18 +114,18 @@ class CartControllerTest {
   @DisplayName("장바구니 저장 실패")
   void saveCartFailure() throws Exception {
     CartChangeDto cartChangeDto = CartChangeDto.builder()
-            .productId(1L)
-            .memberId(1L)
-            .quantity(2)
-            .price(100)
-            .build();
+        .productId(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
 
     when(cartService.saveCart(any(CartChangeDto.class))).thenReturn(null);
 
     mockMvc.perform(put("/cart/change")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(cartChangeDto)))
-            .andExpect(status().isInternalServerError());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(cartChangeDto)))
+        .andExpect(status().isInternalServerError());
 
     verify(cartService, times(1)).saveCart(any(CartChangeDto.class));
   }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CartResponseDto {
+
   private Long cartId;
   private Long memberId;
   private int quantity;

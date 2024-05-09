@@ -1,70 +1,50 @@
 package com.shopping.member.service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
+
+import com.shopping.member.dto.MemberRequestDto;
+import com.shopping.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import com.shopping.common.MemberRole;
-import com.shopping.member.dto.RequestMemberDto;
-import com.shopping.member.entity.Member;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-@ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+@DisplayName("MemberService 테스트")
+public class MemberServiceTest {
+
+  @Mock
+  private MemberRepository memberRepository;
 
   @InjectMocks
   private MemberService memberService;
 
-  private RequestMemberDto existingMemberDto;
-  private RequestMemberDto newMemberDto;
-
   @BeforeEach
   public void setUp() {
-    existingMemberDto = RequestMemberDto
-        .builder()
-        .name("existingName")
-        .password("existingPassword")
-        .address("existingAddress")
-        .memberRole(MemberRole.USER)
-        .build();
-
-    newMemberDto = RequestMemberDto
-        .builder()
-        .name("newName")
-        .password("newPassword")
-        .address("newAddress")
-        .memberRole(MemberRole.ADMIN)
-        .build();
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  @DisplayName("닉네임 중복으로 인한 회원가입실패")
-  public void testRegisterMemberWithExistingName() {
+  @DisplayName("회원 가입 - 실패하는 테스트")
+  public void testRegisterMember_Failure() {
     // Given
-    when(memberService.existsByName("test")).thenReturn(true);
+    MemberRequestDto requestDto = MemberRequestDto.builder()
+        .name("John")
+        .password("password")
+        .address("123 Street")
+        .build();
 
     // When
-    Member result = memberService.addMember(existingMemberDto);
+    when(memberRepository.save(any())).thenReturn(null);
 
     // Then
-    assertNotNull(result);
+    assertThrows(RuntimeException.class, () -> {
+      memberService.addMember(requestDto);
+    });
   }
-
-  @Test
-  @DisplayName("회원가입성공")
-  public void testRegisterMemberWithNewName() {
-    // Given
-    when(memberService.existsByName("test")).thenReturn(false);
-
-    // When
-    Member result = memberService.addMember(newMemberDto);
-
-    // Then
-    assertNotNull(result);
-  }
-
-
 }
+
+

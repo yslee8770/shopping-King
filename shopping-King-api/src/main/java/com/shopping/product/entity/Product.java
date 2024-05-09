@@ -1,6 +1,5 @@
 package com.shopping.product.entity;
 
-import java.time.LocalDateTime;
 import com.shopping.category.entity.Category;
 import com.shopping.common.DeleteAt;
 import jakarta.persistence.Column;
@@ -12,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

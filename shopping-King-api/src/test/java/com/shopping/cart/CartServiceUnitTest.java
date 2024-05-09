@@ -55,21 +55,21 @@ class CartServiceUnitTest {
     Long productId = 1L;
     Long memberId = 1L;
     CartChangeDto cartChangeDto = CartChangeDto.builder()
-            .productId(productId)
-            .memberId(memberId)
-            .quantity(2)
-            .price(100)
-            .deleteAt(DeleteAt.N)
-            .build();
+        .productId(productId)
+        .memberId(memberId)
+        .quantity(2)
+        .price(100)
+        .deleteAt(DeleteAt.N)
+        .build();
     Product product = Product.builder().id(productId).build();
     Cart cart = Cart.builder()
-            .id(1L)
-            .memberId(memberId)
-            .product(product)
-            .quantity(2)
-            .price(100)
-            .deleteAt(DeleteAt.N)
-            .build();
+        .id(1L)
+        .memberId(memberId)
+        .product(product)
+        .quantity(2)
+        .price(100)
+        .deleteAt(DeleteAt.N)
+        .build();
 
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
     when(cartRepository.save(any(Cart.class))).thenReturn(cart);

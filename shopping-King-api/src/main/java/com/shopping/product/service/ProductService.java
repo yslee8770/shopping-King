@@ -1,26 +1,27 @@
 package com.shopping.product.service;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
 import com.shopping.category.repository.CategoryRepository;
 import com.shopping.common.mapper.ProductMapper;
 import com.shopping.product.dto.ProductRequestDto;
 import com.shopping.product.entity.Product;
 import com.shopping.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
 
   public List<Product> findCategoryList(Long categoryId) {
     return
-    (categoryId == null)
-        ? productRepository.findAll()
-        : productRepository.findAllByCategoryId(categoryId);
+        (categoryId == null)
+            ? productRepository.findAll()
+            : productRepository.findAllByCategoryId(categoryId);
   }
 
   public Product findProudctByProductId(Long productId) {

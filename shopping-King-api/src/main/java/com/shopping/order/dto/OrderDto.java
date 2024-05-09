@@ -1,8 +1,8 @@
 package com.shopping.order.dto;
 
-import java.time.LocalDateTime;
 import com.shopping.common.OrderStatus;
 import com.shopping.product.dto.ProductDto;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderDto {
+
   // 유저id
   private long memberId;
   // 상품

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
+
   private Long categoryId;
   private String name;
   private DeleteAt deleteAt;

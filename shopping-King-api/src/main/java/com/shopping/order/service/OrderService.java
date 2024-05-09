@@ -1,8 +1,5 @@
 package com.shopping.order.service;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 import com.shopping.common.mapper.OrderMapper;
 import com.shopping.member.repository.MemberRepository;
 import com.shopping.order.dto.OrderRequestDto;
@@ -10,11 +7,15 @@ import com.shopping.order.entity.Orders;
 import com.shopping.order.repository.OrderRepository;
 import com.shopping.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
   private final OrderRepository orderRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;

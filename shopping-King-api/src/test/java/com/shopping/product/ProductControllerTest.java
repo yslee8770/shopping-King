@@ -1,5 +1,7 @@
 package com.shopping.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shopping.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.product.dto.ProductResponseDto;
 
 @SpringBootTest
 @AutoConfigureMockMvc
