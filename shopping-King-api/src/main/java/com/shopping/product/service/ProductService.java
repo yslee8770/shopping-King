@@ -1,7 +1,6 @@
 package com.shopping.product.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.shopping.category.repository.CategoryRepository;
 import com.shopping.common.mapper.ProductMapper;

@@ -34,15 +34,6 @@ public class OrderControllerTest {
   public void setup() {
     ProductResponseDto productDto =
         ProductResponseDto.builder().productName("TestProduct").price(10000).build();
-    //
-    // testOrder = OrderRequestDto
-    // .builder()
-    // .memberId(1L)
-    // .orderedTime(LocalDateTime.now())
-    // .quantity(2)
-    // .price(20000)
-    // .orderStatus(OrderStatus.PAYMENT)
-    // .build();
   }
 
   @Test
