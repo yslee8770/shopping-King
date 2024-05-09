@@ -37,6 +37,7 @@ public class Member {
   @Enumerated(value = EnumType.STRING)
   private MemberRole memberRole;
 
+  @Builder.Default
   @OneToMany(mappedBy = "member")
   private List<Orders> orders = new ArrayList<Orders>();
 }

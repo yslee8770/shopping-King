@@ -111,17 +111,6 @@ public class OrderServiceTest {
     Member member = Member.builder().id(memberId).name("User1").build();
     Product product = Product.builder().id(productId).productNm("Product1").build();
 
-    Orders savedOrder = Orders.builder()
-            .id(1L)
-            .member(member)
-            .product(product)
-            .quantity(orderRequestDto.getQuantity())
-            .price(orderRequestDto.getPrice())
-            .orderDt(LocalDateTime.now())
-            .address("Address")
-            .orderStatus(orderRequestDto.getOrderStatus())
-            .build();
-
     when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
     when(orderRepository.save(any())).thenAnswer(invocation -> {

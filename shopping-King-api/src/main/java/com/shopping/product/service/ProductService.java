@@ -19,15 +19,9 @@ public class ProductService {
 
   public List<Product> findCategoryList(Long categoryId) {
     return
-
     (categoryId == null)
-        ? Optional
-            .ofNullable(productRepository.findAll())
-            .orElseThrow(() -> new RuntimeException("No Product "))
-        : Optional
-            .ofNullable(productRepository.findAllByCategoryId(categoryId))
-            .orElseThrow(
-                () -> new RuntimeException("Product not found with categoryId: " + categoryId));
+        ? productRepository.findAll()
+        : productRepository.findAllByCategoryId(categoryId);
   }
 
   public Product findProudctByProductId(Long productId) {
