@@ -73,7 +73,6 @@ public class OrderServiceTest {
   @Test
   @DisplayName("특정 주문 조회 - 주문이 존재하는 경우")
   public void testFindOrdersByOrderId_WhenOrderExists() {
-    // Mock 데이터 생성
     Long orderId = 1L;
     Orders order = Orders.builder().id(orderId).orderDt(LocalDateTime.now()).build();
     when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
