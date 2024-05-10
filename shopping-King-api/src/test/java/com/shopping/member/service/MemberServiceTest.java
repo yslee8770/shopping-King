@@ -1,10 +1,10 @@
 package com.shopping.member.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import com.shopping.member.dto.MemberRequestDto;
+import com.shopping.member.entity.Member;
 import com.shopping.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,15 +36,36 @@ public class MemberServiceTest {
         .password("password")
         .address("123 Street")
         .build();
-
     // When
-    when(memberRepository.save(any())).thenReturn(null);
-
+    when(memberRepository.save(any())).thenThrow(new RuntimeException("Failed to save member"));
     // Then
     assertThrows(RuntimeException.class, () -> {
       memberService.addMember(requestDto);
     });
   }
+
+  @Test
+  @DisplayName("회원 추가 - 성공하는 테스트")
+  public void testAddMember_Success() {
+    // Given
+    MemberRequestDto requestDto = MemberRequestDto.builder()
+        .name("John")
+        .password("password")
+        .address("123 Street")
+        .build();
+    Member savedMember = Member.builder()
+        .id(1L)
+        .name("John")
+        .password("password")
+        .address("123 Street")
+        .build();
+
+    // When
+    when(memberRepository.save(any())).thenReturn(savedMember);
+    Member addedMember = memberService.addMember(requestDto);
+
+    // Then
+    assertEquals(savedMember, addedMember);
+    verify(memberRepository).save(any());
+  }
 }
-
-

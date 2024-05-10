@@ -1,22 +1,20 @@
 package com.shopping.member.service;
 
-import org.springframework.stereotype.Service;
 import com.shopping.common.mapper.MemberMapper;
 import com.shopping.member.dto.MemberRequestDto;
 import com.shopping.member.entity.Member;
 import com.shopping.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
   private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
 
   public Member addMember(MemberRequestDto requestMemberDto) {
-    return memberRepository.save(MemberMapper.requestMemberDtoToMember(requestMemberDto));
+    return memberRepository.save(MemberMapper.requestMemberDtoToMemberForSave(requestMemberDto));
   }
 
   public boolean existsByName(String existingName) {
