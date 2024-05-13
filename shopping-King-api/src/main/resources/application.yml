@@ -2,12 +2,12 @@ spring:
   application:
     name: shopping
   datasource:
-    url: jdbc:h2:tcp://localhost/~/shoppingking
-    driver-class-name: org.h2.Driver
-    username: test
-    password: test
+    url: jdbc:mysql://localhost:3306/shoppingking
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: shoppingking
+    password: shoppingking
   jpa:
     hibernate:
-      ddl-auto: create
-    database-platform: org.hibernate.dialect.H2Dialect
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
