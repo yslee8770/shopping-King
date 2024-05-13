@@ -1,29 +1,30 @@
 package com.shopping.cart;
 
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shopping.cart.dto.CartChangeDto;
+import com.shopping.cart.entity.Cart;
+import com.shopping.cart.repository.CartRepository;
+import com.shopping.cart.service.CartService;
+import com.shopping.cart.web.CartController;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.cart.dto.CartResponseDto;
-import com.shopping.cart.web.CartController;
-import com.shopping.product.dto.ProductDto;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CartController.class)
-public class CartControllerTest {
+@AutoConfigureMockMvc
+class CartControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -31,74 +32,101 @@ public class CartControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private List<CartResponseDto> cartDtos;
+  @MockBean
+  private CartRepository cartRepository;
 
-  @BeforeEach
-  void setUp() {
-    cartDtos = new ArrayList<>();
-
-    ProductDto productDto = ProductDto.builder().discountPrice(10000).price(12000).build();
-
-    CartResponseDto cartResponseDto =
-        CartResponseDto.builder().productDto(productDto).memberId(1L).quantity(2).build();
-
-    cartDtos.add(cartResponseDto);
-  }
+  @MockBean
+  private CartService cartService;
 
   @Test
-  public void testCartList() throws Exception {
-    mockMvc
-        .perform(get("/cart/list/{memberId}", 1L).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.[0].productDto.productName", is("Sample Product")))
-        .andExpect(jsonPath("$.[0].productDto.productId", is(1)))
-        .andExpect(jsonPath("$.[0].productDto.stockQuantity", is(10)))
-        .andExpect(jsonPath("$.[0].productDto.salesRate", is(5)))
-        .andExpect(jsonPath("$.[0].productDto.category", is("Sample Category")))
-        .andExpect(jsonPath("$.[0].productDto.price", is(12000)))
-        .andExpect(jsonPath("$.[0].productDto.discountRate", is(20)))
-        .andExpect(jsonPath("$.[0].productDto.registrationDate").exists())
-        .andExpect(jsonPath("$.[0].productDto.statusCode", is("SALE")))
-        .andExpect(jsonPath("$.[0].productDto.description", is("Sample Description")))
-        .andExpect(jsonPath("$.[0].cartId", is(1)))
-        .andExpect(jsonPath("$.[0].memberId", is(1)))
-        .andExpect(jsonPath("$.[0].quantity", is(2)))
-        .andExpect(jsonPath("$.[0].price", is(24000)))
-        .andDo(print());
-  }
+  @DisplayName("장바구니 값이 있을때")
+  void findCartListWithItems() throws Exception {
+    Cart cart1 = Cart.builder()
+        .id(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
+    List<Cart> cartList = Collections.singletonList(cart1);
 
-  @Test
-  public void testAddCart() throws Exception {
-    mockMvc
-        .perform(post("/cart/add/{memberId}/{productId}", 1L, 1L)
-            .contentType(MediaType.APPLICATION_JSON))
+    when(cartRepository.findByMemberId(1L)).thenReturn(cartList);
+
+    mockMvc.perform(get("/cart/list/{memberId}", 1L))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.[0].productDto.productName", is("Sample Product")))
-        .andExpect(jsonPath("$.[0].productDto.productId", is(1)))
-        .andExpect(jsonPath("$.[0].productDto.stockQuantity", is(10)))
-        .andExpect(jsonPath("$.[0].productDto.salesRate", is(5)))
-        .andExpect(jsonPath("$.[0].productDto.category", is("Sample Category")))
-        .andExpect(jsonPath("$.[0].productDto.price", is(12000)))
-        .andExpect(jsonPath("$.[0].productDto.discountRate", is(20)))
-        .andExpect(jsonPath("$.[0].productDto.registrationDate").exists())
-        .andExpect(jsonPath("$.[0].productDto.statusCode", is("SALE")))
-        .andExpect(jsonPath("$.[0].productDto.description", is("Sample Description")))
-        .andExpect(jsonPath("$.[0].cartId", is(1)))
-        .andExpect(jsonPath("$.[0].memberId", is(1)))
-        .andExpect(jsonPath("$.[0].quantity", is(2)))
-        .andExpect(jsonPath("$.[0].price", is(24000)))
-        .andDo(print());
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$[0].id").value(1))
+        .andExpect(jsonPath("$[0].memberId").value(1))
+        .andExpect(jsonPath("$[0].quantity").value(2))
+        .andExpect(jsonPath("$[0].price").value(100));
+
+    verify(cartService, times(1)).findCartsByMemberId(1L);
   }
 
   @Test
-  public void testDeleteCart() throws Exception {
-    List<Long> expectedProductIds = Arrays.asList(1L, 2L, 3L);
+  @DisplayName("장바구니 값이 없을때")
+  void findCartListWithoutItems() throws Exception {
+    // Mock data without items
+    List<Cart> cartList = Collections.emptyList();
 
-    mockMvc
-        .perform(delete("/cart/delete")
-            .param("productsIds", "1,2,3")
-            .contentType(MediaType.APPLICATION_JSON))
+    when(cartRepository.findByMemberId(1L)).thenReturn(cartList);
+
+    mockMvc.perform(get("/cart/list/{memberId}", 1L))
         .andExpect(status().isOk())
-        .andExpect(content().json(objectMapper.writeValueAsString(expectedProductIds)))
-        .andDo(print());
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$").isEmpty());
+
+    verify(cartService, times(1)).findCartsByMemberId(1L);
+  }
+
+  @Test
+  @DisplayName("장바구니 저장 성공")
+  void saveCartSuccess() throws Exception {
+    CartChangeDto cartChangeDto = CartChangeDto.builder()
+        .productId(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
+    Cart savedCart = Cart.builder()
+        .id(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
+
+    when(cartService.saveCart(any(CartChangeDto.class))).thenReturn(savedCart);
+
+    mockMvc.perform(put("/cart/change")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(cartChangeDto)))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.memberId").value(1))
+        .andExpect(jsonPath("$.quantity").value(2))
+        .andExpect(jsonPath("$.price").value(100));
+
+    verify(cartService, times(1)).saveCart(any(CartChangeDto.class));
+  }
+
+  @Test
+  @DisplayName("장바구니 저장 실패")
+  void saveCartFailure() throws Exception {
+    CartChangeDto cartChangeDto = CartChangeDto.builder()
+        .productId(1L)
+        .memberId(1L)
+        .quantity(2)
+        .price(100)
+        .build();
+
+    when(cartService.saveCart(any(CartChangeDto.class))).thenReturn(null);
+
+    mockMvc.perform(put("/cart/change")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(cartChangeDto)))
+        .andExpect(status().isInternalServerError());
+
+    verify(cartService, times(1)).saveCart(any(CartChangeDto.class));
   }
 }

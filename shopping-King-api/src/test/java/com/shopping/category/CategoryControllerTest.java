@@ -1,6 +1,7 @@
 package com.shopping.category;
 
 import static org.hamcrest.Matchers.is;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.category.dto.CategoryDto;
-import com.shopping.common.UseStatus;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,8 +29,6 @@ public class CategoryControllerTest {
 
   @BeforeEach
   public void setup() {
-    testCategory =
-        CategoryDto.builder().categoryId(1L).name("Test Category").status(UseStatus.USE).build();
   }
 
   @Test

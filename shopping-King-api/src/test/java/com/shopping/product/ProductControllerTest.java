@@ -1,5 +1,7 @@
 package com.shopping.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shopping.product.dto.ProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.common.ProductStatus;
-import com.shopping.product.dto.ProductDto;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -24,11 +23,11 @@ public class ProductControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private ProductDto testProduct;
+  private ProductResponseDto testProduct;
 
   @BeforeEach
   public void setup() {
-    testProduct = ProductDto
+    testProduct = ProductResponseDto
         .builder()
         .productId(1L)
         .productName("Test Product")
@@ -37,7 +36,6 @@ public class ProductControllerTest {
         .category("Test Category")
         .price(10000)
         .discountRate(10)
-        .statusCode(ProductStatus.SALE)
         .description("Test Description")
         .build();
   }

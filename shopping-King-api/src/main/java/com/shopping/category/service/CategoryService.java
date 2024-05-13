@@ -1,40 +1,32 @@
 package com.shopping.category.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 import com.shopping.category.dto.CategoryDto;
+import com.shopping.category.entity.Category;
 import com.shopping.category.repository.CategoryRepository;
-import com.shopping.common.CommonNotFoundException;
+import com.shopping.common.mapper.CategoryMapper;
+import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-  private CategoryRepository categoryRepository;
 
-  public List<CategoryDto> findAllCategories() {
-    return categoryRepository
-        .findAllCategories()
-        .stream()
-        .map(category -> CategoryDto
-            .builder()
-            .categoryId(category.getCategoryId())
-            .name(category.getName())
-            .status(category.getStatus())
-            .build())
-        .collect(Collectors.toList());
+  private final CategoryRepository categoryRepository;
+
+  public List<Category> findCategoryList() {
+    return categoryRepository.findAll();
   }
 
-  public CategoryDto findCategory(Long categoryId) {
+  public Category findCategoryByCategoryId(Long categoryId) {
     return categoryRepository
         .findById(categoryId)
-        .map(category -> CategoryDto
-            .builder()
-            .categoryId(category.getCategoryId())
-            .name(category.getName())
-            .status(category.getStatus())
-            .build())
-        .orElseThrow(() -> new CommonNotFoundException(categoryId));
+        .orElseThrow(
+            () -> new EntityNotFoundException("Category not found with id: " + categoryId));
+  }
+
+  public Category saveCategory(CategoryDto categoryDto) {
+    return categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryDto));
   }
 }

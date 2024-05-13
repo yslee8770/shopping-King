@@ -1,32 +1,41 @@
 package com.shopping.product.dto;
 
-import org.springframework.lang.Nullable;
-import com.shopping.common.SortType;
+import com.shopping.common.DeleteAt;
+import io.micrometer.common.lang.Nullable;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductRequestDto {
-  @Nullable
-  private String category;
-  @Nullable
-  private String productName;
-  @Nullable
-  private SortType sortType;
-  @Nullable
-  private Integer pageNumber;
-  @Nullable
-  private Integer pageSize;
 
-  public Integer getPageNumber() {
-    return pageNumber != null ? pageNumber : 1;
-  }
+  @Nullable
+  private Long id;
 
-  public Integer getPageSize() {
-    return pageSize != null ? pageSize : 10;
-  }
+  private String productNm;
+
+  private int productPrice;
+
+  private int stockAmount;
+
+  private int salesRate;
+
+  private int discountRate;
+
+  private int discountPrice;
+
+  private LocalDateTime registDt;
+
+  private String description;
+
+  private DeleteAt deleteAt;
+
+  private Long categoryId;
+
 
 }
