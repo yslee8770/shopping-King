@@ -5,24 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.shopping.dto.CategoryDto;
+import com.shopping.entity.Category;
+import com.shopping.enums.DeleteAt;
+import com.shopping.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.shopping.dto.CategoryDto;
-import com.shopping.entity.Category;
-import com.shopping.repository.CategoryRepository;
-
-import com.shopping.enums.DeleteAt;
-import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("CategoryService 테스트")
+@ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
 
   @Mock
@@ -30,11 +29,6 @@ public class CategoryServiceTest {
 
   @InjectMocks
   private CategoryService categoryService;
-
-  @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   @Test
   @DisplayName("모든 카테고리 조회")

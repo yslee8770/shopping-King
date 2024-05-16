@@ -1,7 +1,10 @@
 package com.shopping.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.shopping.dto.MemberRequestDto;
 import com.shopping.entity.Member;
@@ -9,11 +12,14 @@ import com.shopping.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("MemberService 테스트")
+@ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
 
   @Mock
@@ -21,11 +27,6 @@ public class MemberServiceTest {
 
   @InjectMocks
   private MemberService memberService;
-
-  @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   @Test
   @DisplayName("회원 가입 - 실패하는 테스트")

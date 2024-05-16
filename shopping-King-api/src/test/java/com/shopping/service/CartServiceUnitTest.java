@@ -9,8 +9,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.shopping.dto.CartChangeDto;
@@ -20,7 +22,7 @@ import com.shopping.enums.DeleteAt;
 import com.shopping.entity.Product;
 import com.shopping.repository.ProductRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CartServiceUnitTest {
 
   @Mock

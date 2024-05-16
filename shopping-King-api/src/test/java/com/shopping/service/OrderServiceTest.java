@@ -22,11 +22,14 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("OrderService 테스트")
+@ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
 
   @Mock
@@ -40,11 +43,6 @@ public class OrderServiceTest {
 
   @InjectMocks
   private OrderService orderService;
-
-  @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   @Test
   @DisplayName("특정 회원의 주문 목록 조회 - 회원이 존재하는 경우")
