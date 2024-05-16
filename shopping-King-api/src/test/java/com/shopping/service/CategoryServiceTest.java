@@ -1,4 +1,4 @@
-package com.shopping.category;
+package com.shopping.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,7 +13,6 @@ import com.shopping.dto.CategoryDto;
 import com.shopping.entity.Category;
 import com.shopping.repository.CategoryRepository;
 
-import com.shopping.service.CategoryService;
 import com.shopping.enums.DeleteAt;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

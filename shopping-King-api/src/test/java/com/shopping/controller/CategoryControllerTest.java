@@ -1,4 +1,4 @@
-package com.shopping.category;
+package com.shopping.controller;
 
 import static org.hamcrest.Matchers.is;
 

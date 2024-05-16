@@ -1,4 +1,4 @@
-package com.shopping.product;
+package com.shopping.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.dto.ProductResponseDto;

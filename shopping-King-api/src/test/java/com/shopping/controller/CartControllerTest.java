@@ -1,4 +1,4 @@
-package com.shopping.cart;
+package com.shopping.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.dto.CartChangeDto;

@@ -1,4 +1,4 @@
-package com.shopping.cart;
+package com.shopping.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBeans;
 import com.shopping.dto.CartChangeDto;
 import com.shopping.entity.Cart;
 import com.shopping.repository.CartRepository;
-import com.shopping.service.CartService;
 import com.shopping.enums.DeleteAt;
 import com.shopping.entity.Product;
 import com.shopping.repository.ProductRepository;

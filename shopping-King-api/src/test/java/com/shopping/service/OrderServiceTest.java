@@ -1,4 +1,4 @@
-package com.shopping.order;
+package com.shopping.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,7 +12,6 @@ import com.shopping.repository.MemberRepository;
 import com.shopping.dto.OrderRequestDto;
 import com.shopping.entity.Orders;
 import com.shopping.repository.OrderRepository;
-import com.shopping.service.OrderService;
 import com.shopping.entity.Product;
 import com.shopping.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;

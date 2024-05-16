@@ -1,4 +1,4 @@
-package com.shopping.product;
+package com.shopping.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -8,7 +8,6 @@ import com.shopping.enums.DeleteAt;
 import com.shopping.dto.ProductRequestDto;
 import com.shopping.entity.Product;
 import com.shopping.repository.ProductRepository;
-import com.shopping.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
