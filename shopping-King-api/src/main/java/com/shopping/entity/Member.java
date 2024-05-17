@@ -1,5 +1,6 @@
 package com.shopping.entity;
 
+import jakarta.persistence.GenerationType;
 import java.util.ArrayList;
 import java.util.List;
 import com.shopping.enums.MemberRole;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Member {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "member_id")
   private Long id;
 
