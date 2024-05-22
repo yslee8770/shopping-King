@@ -1,0 +1,9 @@
+/build
+.gradle
+/out
+/.github
+/.idea
+/gradlew
+/gradlew.bat
+/settings.gradle
+/.gitignore
