@@ -12,7 +12,7 @@ public class ProductMapper {
     return product == null ? null
         : ProductResponseDto
             .builder()
-            .productId(product.getId())
+            .productId(product.getProductId())
             .productName(product.getProductNm())
             .stockQuantity(product.getStockAmount())
             .salesRate(product.getSalesRate())
