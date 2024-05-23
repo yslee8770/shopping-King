@@ -1,11 +1,19 @@
 package com.shopping.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import com.shopping.dto.ProductRequestDto;
 import com.shopping.dto.ProductResponseDto;
 import com.shopping.enums.DeleteAt;
-import com.shopping.service.ProductService;
 import com.shopping.mapper.ProductMapper;
+import com.shopping.service.ProductService;
 import com.shopping.web.ProductController;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,15 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductControllerTest {
@@ -57,20 +56,21 @@ public class ProductControllerTest {
         .description("Test Description")
         .build();
 
-    when(productService.findCategoryList(anyLong())).thenReturn(Collections.singletonList(ProductMapper.productRequestDtoToProduct(
-        ProductRequestDto.builder()
-            .productNm("Test Product")
-            .productPrice(100)
-            .stockAmount(10)
-            .salesRate(5)
-            .discountRate(10)
-            .discountPrice(90)
-            .registDt(LocalDateTime.now())
-            .description("Test Description")
-            .deleteAt(DeleteAt.N)
-            .categoryId(1L)
-            .build(), null
-    )));
+    when(productService.findCategoryList(anyLong())).thenReturn(
+        Collections.singletonList(ProductMapper.productRequestDtoToProduct(
+            ProductRequestDto.builder()
+                .productNm("Test Product")
+                .productPrice(100)
+                .stockAmount(10)
+                .salesRate(5)
+                .discountRate(10)
+                .discountPrice(90)
+                .registDt(LocalDateTime.now())
+                .description("Test Description")
+                .deleteAt(DeleteAt.N)
+                .categoryId(1L)
+                .build(), null
+        )));
 
     ResponseEntity<List<ProductResponseDto>> response = productController.findProductList(1L);
     assertEquals(1, response.getBody().size());
@@ -93,20 +93,21 @@ public class ProductControllerTest {
         .description("Test Description")
         .build();
 
-    when(productService.findProudctByProductId(anyLong())).thenReturn(ProductMapper.productRequestDtoToProduct(
-        ProductRequestDto.builder()
-            .productNm("Test Product")
-            .productPrice(100)
-            .stockAmount(10)
-            .salesRate(5)
-            .discountRate(10)
-            .discountPrice(90)
-            .registDt(LocalDateTime.now())
-            .description("Test Description")
-            .deleteAt(DeleteAt.N)
-            .categoryId(1L)
-            .build(), null
-    ));
+    when(productService.findProudctByProductId(anyLong())).thenReturn(
+        ProductMapper.productRequestDtoToProduct(
+            ProductRequestDto.builder()
+                .productNm("Test Product")
+                .productPrice(100)
+                .stockAmount(10)
+                .salesRate(5)
+                .discountRate(10)
+                .discountPrice(90)
+                .registDt(LocalDateTime.now())
+                .description("Test Description")
+                .deleteAt(DeleteAt.N)
+                .categoryId(1L)
+                .build(), null
+        ));
 
     ResponseEntity<ProductResponseDto> response = productController.findProductDetail(1L);
     assertEquals("Test Product", response.getBody().getProductName());
@@ -127,7 +128,8 @@ public class ProductControllerTest {
         .categoryId(1L)
         .build();
 
-    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(ProductMapper.productRequestDtoToProduct(requestDto, null));
+    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(
+        ProductMapper.productRequestDtoToProduct(requestDto, null));
 
     ResponseEntity<ProductResponseDto> response = productController.addProduct(requestDto);
     assertEquals("Test Product", response.getBody().getProductName());
@@ -148,7 +150,8 @@ public class ProductControllerTest {
         .categoryId(1L)
         .build();
 
-    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(ProductMapper.productRequestDtoToProduct(requestDto, null));
+    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(
+        ProductMapper.productRequestDtoToProduct(requestDto, null));
 
     ResponseEntity<ProductResponseDto> response = productController.changeProduct(requestDto);
     assertEquals("Test Product", response.getBody().getProductName());
