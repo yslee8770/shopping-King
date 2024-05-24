@@ -1,165 +1,181 @@
 package com.shopping.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.shopping.dto.ProductRequestDto;
-import com.shopping.dto.ProductResponseDto;
+import com.shopping.entity.Category;
 import com.shopping.enums.DeleteAt;
 import com.shopping.mapper.ProductMapper;
 import com.shopping.service.ProductService;
 import com.shopping.web.ProductController;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(ProductController.class)
 public class ProductControllerTest {
 
-  @Mock
-  private ProductService productService;
-
-  @InjectMocks
-  private ProductController productController;
-
+  @Autowired
   private MockMvc mockMvc;
 
+  @MockBean
+  private ProductService productService;
+
+  private ObjectMapper objectMapper;
+
   @BeforeEach
-  public void setup() {
-    mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+  public void setUp() {
+    objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
   }
 
   @Test
-  public void testFindProductList() {
-    ProductResponseDto productResponseDto = ProductResponseDto.builder()
-        .productId(1L)
-        .productName("Test Product")
-        .stockQuantity(10)
-        .salesRate(5)
-        .category("Test Category")
-        .price(100)
-        .discountRate(10)
-        .discountPrice(90)
-        .registDt(LocalDateTime.now())
-        .deleteAt(DeleteAt.N)
-        .description("Test Description")
-        .build();
-
-    when(productService.findCategoryList(anyLong())).thenReturn(
-        Collections.singletonList(ProductMapper.productRequestDtoToProduct(
+  @WithMockUser
+  public void testFindProductList() throws Exception {
+    Mockito.when(productService.findCategoryList(1L))
+        .thenReturn(Collections.singletonList(ProductMapper.productRequestDtoToProduct(
             ProductRequestDto.builder()
                 .productNm("Test Product")
-                .productPrice(100)
-                .stockAmount(10)
-                .salesRate(5)
+                .productPrice(1000)
+                .stockAmount(100)
+                .salesRate(10)
                 .discountRate(10)
-                .discountPrice(90)
+                .discountPrice(900)
                 .registDt(LocalDateTime.now())
                 .description("Test Description")
                 .deleteAt(DeleteAt.N)
                 .categoryId(1L)
-                .build(), null
-        )));
+                .build(),
+            null)));
 
-    ResponseEntity<List<ProductResponseDto>> response = productController.findProductList(1L);
-    assertEquals(1, response.getBody().size());
-    assertEquals("Test Product", response.getBody().get(0).getProductName());
+    mockMvc.perform(get("/product/list/1"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].productNm", is("Test Product")))
+        .andExpect(jsonPath("$[0].price", is(1000)));
   }
 
   @Test
-  public void testFindProductDetail() {
-    ProductResponseDto productResponseDto = ProductResponseDto.builder()
-        .productId(1L)
-        .productName("Test Product")
-        .stockQuantity(10)
-        .salesRate(5)
-        .category("Test Category")
-        .price(100)
-        .discountRate(10)
-        .discountPrice(90)
-        .registDt(LocalDateTime.now())
-        .deleteAt(DeleteAt.N)
-        .description("Test Description")
-        .build();
-
-    when(productService.findProudctByProductId(anyLong())).thenReturn(
-        ProductMapper.productRequestDtoToProduct(
+  @WithMockUser
+  public void testFindProductDetail() throws Exception {
+    Mockito.when(productService.findProudctByProductId(1L))
+        .thenReturn(ProductMapper.productRequestDtoToProduct(
             ProductRequestDto.builder()
                 .productNm("Test Product")
-                .productPrice(100)
-                .stockAmount(10)
-                .salesRate(5)
+                .productPrice(1000)
+                .stockAmount(100)
+                .salesRate(10)
                 .discountRate(10)
-                .discountPrice(90)
+                .discountPrice(900)
                 .registDt(LocalDateTime.now())
                 .description("Test Description")
                 .deleteAt(DeleteAt.N)
                 .categoryId(1L)
-                .build(), null
-        ));
+                .build(),
+            null));
 
-    ResponseEntity<ProductResponseDto> response = productController.findProductDetail(1L);
-    assertEquals("Test Product", response.getBody().getProductName());
+    mockMvc.perform(get("/product/detail/1"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.productNm", is("Test Product")))
+        .andExpect(jsonPath("$.price", is(1000)));
   }
 
   @Test
-  public void testAddProduct() {
+  @WithMockUser
+  public void testAddProduct() throws Exception {
     ProductRequestDto requestDto = ProductRequestDto.builder()
-        .productNm("Test Product")
-        .productPrice(100)
-        .stockAmount(10)
+        .productNm("New Product")
+        .productPrice(2000)
+        .stockAmount(50)
         .salesRate(5)
-        .discountRate(10)
-        .discountPrice(90)
+        .discountRate(20)
+        .discountPrice(1600)
         .registDt(LocalDateTime.now())
-        .description("Test Description")
+        .description("New Product Description")
         .deleteAt(DeleteAt.N)
         .categoryId(1L)
         .build();
 
-    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(
-        ProductMapper.productRequestDtoToProduct(requestDto, null));
+    Mockito.when(productService.changeProduct(any(ProductRequestDto.class)))
+        .thenReturn(ProductMapper.productRequestDtoToProduct(requestDto,
+            Category.builder().Id(1L).name("Test Category").deleteAt(DeleteAt.N).build()));
 
-    ResponseEntity<ProductResponseDto> response = productController.addProduct(requestDto);
-    assertEquals("Test Product", response.getBody().getProductName());
+    mockMvc.perform(post("/product/add")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.productNm", is("New Product")))
+        .andExpect(jsonPath("$.price", is(2000)))
+        .andExpect(jsonPath("$.stockQuantity", is(50)))
+        .andExpect(jsonPath("$.salesRate", is(5)))
+        .andExpect(jsonPath("$.discountRate", is(20)))
+        .andExpect(jsonPath("$.discountPrice", is(1600)))
+        .andExpect(jsonPath("$.registDt").isNotEmpty())
+        .andExpect(jsonPath("$.deleteAt", is("N")))
+        .andExpect(jsonPath("$.description", is("New Product Description")));
   }
 
   @Test
-  public void testChangeProduct() {
+  @WithMockUser
+  public void testChangeProduct() throws Exception {
     ProductRequestDto requestDto = ProductRequestDto.builder()
-        .productNm("Test Product")
-        .productPrice(100)
-        .stockAmount(10)
-        .salesRate(5)
-        .discountRate(10)
-        .discountPrice(90)
+        .productNm("Updated Product")
+        .productPrice(1500)
+        .stockAmount(75)
+        .salesRate(15)
+        .discountRate(15)
+        .discountPrice(1275)
         .registDt(LocalDateTime.now())
-        .description("Test Description")
+        .description("Updated Product Description")
         .deleteAt(DeleteAt.N)
         .categoryId(1L)
         .build();
 
-    when(productService.changeProduct(any(ProductRequestDto.class))).thenReturn(
-        ProductMapper.productRequestDtoToProduct(requestDto, null));
+    Mockito.when(productService.changeProduct(any(ProductRequestDto.class)))
+        .thenReturn(ProductMapper.productRequestDtoToProduct(requestDto,
+            Category.builder().Id(1L).name("Test Category").deleteAt(DeleteAt.N).build()));
 
-    ResponseEntity<ProductResponseDto> response = productController.changeProduct(requestDto);
-    assertEquals("Test Product", response.getBody().getProductName());
+    mockMvc.perform(put("/product/change")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.productNm", is("Updated Product")))
+        .andExpect(jsonPath("$.price", is(1500)))
+        .andExpect(jsonPath("$.stockQuantity", is(75)))
+        .andExpect(jsonPath("$.salesRate", is(15)))
+        .andExpect(jsonPath("$.discountRate", is(15)))
+        .andExpect(jsonPath("$.discountPrice", is(1275)))
+        .andExpect(jsonPath("$.registDt").isNotEmpty())
+        .andExpect(jsonPath("$.deleteAt", is("N")))
+        .andExpect(jsonPath("$.description", is("Updated Product Description")));
   }
 
   @Test
-  public void testDeleteProduct() {
-    ResponseEntity<Long> response = productController.deleteProduct(1L);
-    assertEquals(1L, response.getBody());
+  @WithMockUser
+  public void testDeleteProduct() throws Exception {
+    mockMvc.perform(delete("/product/delete/1").with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(content().string("1"));
   }
 }

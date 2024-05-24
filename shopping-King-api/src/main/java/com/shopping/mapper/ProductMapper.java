@@ -13,7 +13,7 @@ public class ProductMapper {
         : ProductResponseDto
             .builder()
             .productId(product.getProductId())
-            .productName(product.getProductNm())
+            .productNm(product.getProductNm())
             .stockQuantity(product.getStockAmount())
             .salesRate(product.getSalesRate())
             .category(
