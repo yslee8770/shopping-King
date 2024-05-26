@@ -1,9 +1,17 @@
 /build
+/shopping-King-api/build
+*.class
 .gradle
-/out
-/.github
+
+#git
+.github
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose.yml
+
+//intellij
 /.idea
-/gradlew
-/gradlew.bat
-/settings.gradle
-/.gitignore
+
+script/init.sql
