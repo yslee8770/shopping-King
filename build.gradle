@@ -1,17 +1,10 @@
 plugins {
-    id 'java'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'base'
+    id 'io.spring.dependency-management' version '1.1.4' apply false
 }
 group = 'com.shopping'
 version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = '17'
-}
-
-repositories {
-    mavenCentral()
-}
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
@@ -32,11 +25,6 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
-
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
-
 }
 
 
