@@ -13,5 +13,3 @@ docker-compose.yml
 
 //intellij
 /.idea
-
-script/init.sql
