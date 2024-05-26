@@ -11,5 +11,5 @@
 Dockerfile*
 docker-compose.yml
 
-//intellij
+#intellij
 /.idea
