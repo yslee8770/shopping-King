@@ -36,7 +36,8 @@ class CategoryControllerTest {
   @MockBean
   private CategoryService categoryService;
 
-  private static final ObjectMapper objectMapper = new ObjectMapper();
+  @Autowired
+  private ObjectMapper objectMapper ;
 
   @Test
   @WithMockUser
