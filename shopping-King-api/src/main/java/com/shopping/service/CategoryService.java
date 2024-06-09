@@ -2,11 +2,14 @@ package com.shopping.service;
 
 import com.shopping.dto.CategoryDto;
 import com.shopping.entity.Category;
-import com.shopping.repository.CategoryRepository;
 import com.shopping.mapper.CategoryMapper;
+import com.shopping.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,18 +18,26 @@ public class CategoryService {
 
   private final CategoryRepository categoryRepository;
 
-  public List<Category> findCategoryList() {
-    return categoryRepository.findAll();
+  @Async("taskExecutor")
+  public CompletableFuture<List<Category>> findCategoryList() {
+    return CompletableFuture.completedFuture(categoryRepository.findAll());
   }
 
-  public Category findCategoryByCategoryId(Long categoryId) {
-    return categoryRepository
-        .findById(categoryId)
-        .orElseThrow(
-            () -> new EntityNotFoundException("Category not found with id: " + categoryId));
+  public CompletableFuture<Category> findCategoryByCategoryId(Long categoryId) {
+    return CompletableFuture.supplyAsync(() -> {
+      try {
+        return categoryRepository.findById(categoryId)
+            .orElseThrow(
+                () -> new EntityNotFoundException("Category not found with id: " + categoryId));
+      } catch (Exception e) {
+        throw new CompletionException(e);
+      }
+    });
   }
 
-  public Category saveCategory(CategoryDto categoryDto) {
-    return categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryDto));
+  @Async("taskExecutor")
+  public CompletableFuture<Category> saveCategory(CategoryDto categoryDto) {
+    return CompletableFuture.completedFuture(
+        categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryDto)));
   }
 }
