@@ -46,8 +46,4 @@ public class CategoryController {
         .thenApply(category -> ResponseEntity
             .ok(CategoryMapper.categoryToCategoryeDto(category)));
   }
-  // @DeleteMapping("/delete/{categoryId}")
-  // public ResponseEntity<Long> deleteCategory(@PathVariable Long categoryId) {
-  // return ResponseEntity.ok(categoryId);
-  // }
 }

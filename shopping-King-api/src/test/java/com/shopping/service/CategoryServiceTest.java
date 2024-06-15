@@ -42,7 +42,6 @@ public class CategoryServiceTest {
 
     CompletableFuture<List<Category>> futureCategories = categoryService.findCategoryList();
     List<Category> foundCategories = futureCategories.get();
-
     assertEquals(categories.size(), foundCategories.size());
   }
 
@@ -69,7 +68,6 @@ public class CategoryServiceTest {
       futureCategory.get();
     });
 
-    // Check the cause of the ExecutionException
     assertEquals(EntityNotFoundException.class, exception.getCause().getClass());
   }
 
