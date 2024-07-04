@@ -2,6 +2,7 @@ package com.shopping.service;
 
 import com.shopping.dto.CategoryDto;
 import com.shopping.entity.Category;
+import com.shopping.mapper.CategoryMapper;
 import com.shopping.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -51,6 +52,11 @@ public class CategoryService {
         .orElseThrow(
             () -> new EntityNotFoundException("Category not found with id: " + categoryId));
     existingCategory.softDelete();
+  }
+
+  @Transactional
+  public Category createCategory(CategoryDto categoryCreateDto) {
+    return categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryCreateDto));
   }
 
 }

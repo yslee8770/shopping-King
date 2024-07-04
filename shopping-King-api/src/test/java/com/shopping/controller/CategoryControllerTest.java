@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,6 +42,9 @@ public class CategoryControllerTest {
 
   @MockBean
   private CategoryService categoryService;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Test
   @DisplayName("카테고리 이름을 포함한 목록 조회 API 테스트")
@@ -117,5 +122,21 @@ public class CategoryControllerTest {
     mockMvc.perform(delete("/category/{categoryId}", categoryId))
         .andExpect(status().isOk())
         .andExpect(content().string(categoryId.toString()));
+  }
+
+  @Test
+  @DisplayName("카테고리 생성 API 테스트")
+  public void testCreateCategory() throws Exception {
+    Category category = Category.builder().Id(1L).name("Updated Name").deleteAt(DeleteAt.N)
+        .build();
+    CategoryDto categoryCreateDto = CategoryMapper.categoryToCategoryDto(category);
+
+    Mockito.when(categoryService.createCategory(Mockito.any(CategoryDto.class)))
+        .thenReturn(category);
+
+    mockMvc.perform(post("/category")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(categoryCreateDto)))
+        .andExpect(status().isOk());
   }
 }
