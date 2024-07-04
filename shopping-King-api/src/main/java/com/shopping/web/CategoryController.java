@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,12 +24,16 @@ public class CategoryController {
   private final CategoryService categoryService;
 
   @GetMapping
-  public ResponseEntity<List<CategoryDto>> findCategoryList() {
+  public ResponseEntity<List<CategoryDto>> findCategoryList(
+      @RequestParam(required = false) String categoryName,
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "asc") String sort) {
     return ResponseEntity
         .ok(categoryService
-            .findCategoryList()
+            .findCategoryList(categoryName, page, size, sort)
             .stream()
-            .map(CategoryMapper::categoryToCategoryeDto)
+            .map(CategoryMapper::categoryToCategoryDto)
             .collect(Collectors.toList()));
   }
 
@@ -36,18 +41,20 @@ public class CategoryController {
   public ResponseEntity<CategoryDto> findCategoryDetail(@PathVariable Long categoryId) {
     return ResponseEntity
         .ok(CategoryMapper
-            .categoryToCategoryeDto(categoryService.findCategoryByCategoryId(categoryId)));
+            .categoryToCategoryDto(categoryService.findCategoryByCategoryId(categoryId)));
   }
 
-  @PatchMapping
-  public ResponseEntity<CategoryDto> changeCategory(@RequestBody CategoryDto categoryRequestDto) {
+  @PatchMapping("/{categoryId}")
+  public ResponseEntity<CategoryDto> changeCategory(@PathVariable Long categoryId,
+      @RequestBody CategoryDto categoryRequestDto) {
     return ResponseEntity
         .ok(CategoryMapper
-            .categoryToCategoryeDto(categoryService.saveCategory(categoryRequestDto)));
+            .categoryToCategoryDto(categoryService.updateCategory(categoryRequestDto)));
   }
 
-  @DeleteMapping("/categoryId}")
+  @DeleteMapping("/{categoryId}")
   public ResponseEntity<Long> deleteCategory(@PathVariable Long categoryId) {
+    categoryService.deleteCategory(categoryId);
     return ResponseEntity.ok(categoryId);
   }
 }

@@ -1,5 +1,6 @@
 package com.shopping.entity;
 
+import com.shopping.dto.CategoryDto;
 import com.shopping.enums.DeleteAt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,4 +33,16 @@ public class Category {
   @Enumerated(EnumType.STRING)
   private DeleteAt deleteAt;
 
+
+  public void update(CategoryDto categoryDto) {
+    if (categoryDto.getName() != null) {
+      this.name = categoryDto.getName();
+    }
+    if (categoryDto.getDeleteAt() != null) {
+      this.deleteAt = categoryDto.getDeleteAt();
+    }
+  }
+  public void softDelete() {
+    this.deleteAt = DeleteAt.Y;
+  }
 }

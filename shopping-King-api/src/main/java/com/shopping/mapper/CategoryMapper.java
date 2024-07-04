@@ -5,7 +5,7 @@ import com.shopping.entity.Category;
 
 public class CategoryMapper {
 
-  public static CategoryDto categoryToCategoryeDto(Category category) {
+  public static CategoryDto categoryToCategoryDto(Category category) {
     return category == null ? null
         : CategoryDto
             .builder()
