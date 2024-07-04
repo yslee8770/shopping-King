@@ -17,5 +17,5 @@ spring:
       port: 6379
 security:
   jwt:
-    secret: qweiqhwoehqwoiehiqowehoiqhweoihqiowehoiqwheoiqwhoeihqwoiehioqwhweoiqwheoiqbdoicjbasdcqowbdiqioehdblasjbdflkasbdfjkwqbepiorbpqoibr!@#51b23io!@#!
+    secret: mysecretkeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     expiration: 86400000
