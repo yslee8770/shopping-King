@@ -3,7 +3,7 @@ package com.shopping.order;
 import static org.hamcrest.Matchers.is;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.common.OrderStatus;
+import com.shopping.enums.OrderStatus;
 import com.shopping.dto.OrderRequestDto;
 import com.shopping.dto.ProductResponseDto;
 import java.util.ArrayList;
