@@ -1,31 +1,29 @@
 package com.shopping.product;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-import com.shopping.category.entity.Category;
-import com.shopping.category.repository.CategoryRepository;
-import com.shopping.common.DeleteAt;
-import com.shopping.product.dto.ProductRequestDto;
-import com.shopping.product.entity.Product;
-import com.shopping.product.repository.ProductRepository;
-import com.shopping.product.service.ProductService;
+import com.shopping.dto.ProductRequestDto;
+import com.shopping.entity.Category;
+import com.shopping.entity.Product;
+import com.shopping.enums.DeleteAt;
+import com.shopping.repository.CategoryRepository;
+import com.shopping.repository.ProductRepository;
+import com.shopping.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @DisplayName("ProductService 테스트")
 public class ProductServiceTest {
@@ -81,7 +79,7 @@ public class ProductServiceTest {
     Product foundProduct = productService.findProudctByProductId(productId);
 
     assertNotNull(foundProduct);
-    assertEquals(productId, foundProduct.getId());
+    assertEquals(productId, foundProduct.getProductId());
   }
 
   @Test
@@ -122,7 +120,7 @@ public class ProductServiceTest {
 
   private Product createProduct(Long categoryId) {
     return Product.builder()
-        .id(1L)
+        .productId(1L)
         .productNm("Product1")
         .productPrice(10000)
         .stockAmount(10)

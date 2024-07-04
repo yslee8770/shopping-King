@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.is;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopping.common.OrderStatus;
-import com.shopping.order.dto.OrderRequestDto;
-import com.shopping.product.dto.ProductResponseDto;
+import com.shopping.dto.OrderRequestDto;
+import com.shopping.dto.ProductResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ public class OrderControllerTest {
   @BeforeEach
   public void setup() {
     ProductResponseDto productDto =
-        ProductResponseDto.builder().productName("TestProduct").price(10000).build();
+        ProductResponseDto.builder().productNm("TestProduct").price(10000).build();
   }
 
   @Test

@@ -1,7 +1,7 @@
 package com.shopping.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.product.dto.ProductResponseDto;
+import com.shopping.dto.ProductResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ProductControllerTest {
     testProduct = ProductResponseDto
         .builder()
         .productId(1L)
-        .productName("Test Product")
+        .productNm("Test Product")
         .stockQuantity(100)
         .salesRate(50)
         .category("Test Category")

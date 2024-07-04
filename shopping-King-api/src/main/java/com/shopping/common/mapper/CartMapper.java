@@ -1,9 +1,9 @@
 package com.shopping.common.mapper;
 
-import com.shopping.cart.dto.CartChangeDto;
-import com.shopping.cart.dto.CartResponseDto;
-import com.shopping.cart.entity.Cart;
-import com.shopping.product.entity.Product;
+import com.shopping.dto.CartChangeDto;
+import com.shopping.dto.CartResponseDto;
+import com.shopping.entity.Cart;
+import com.shopping.entity.Product;
 
 public class CartMapper {
 
@@ -15,7 +15,7 @@ public class CartMapper {
             .memberId(cart.getId())
             .quantity(cart.getQuantity())
             .price(cart.getProduct().getProductPrice())
-            .productId(cart.getProduct().getId())
+            .productId(cart.getProduct().getProductId())
             .productNm(cart.getProduct().getProductNm())
             .productDiscountPrice(cart.getProduct().getDiscountPrice())
             .productDiscountRate(cart.getProduct().getDiscountRate())

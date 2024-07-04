@@ -21,7 +21,7 @@ public class CategoryController {
 
   private final CategoryService categoryService;
 
-  @GetMapping("/list")
+  @GetMapping
   public ResponseEntity<List<CategoryDto>> findCategoryList() {
     return ResponseEntity
         .ok(categoryService
@@ -31,7 +31,7 @@ public class CategoryController {
             .collect(Collectors.toList()));
   }
 
-  @GetMapping("/detail/{categoryId}")
+  @GetMapping("{categoryId}")
   public ResponseEntity<CategoryDto> findCategoryDetail(@PathVariable Long categoryId) {
     return ResponseEntity
         .ok(CategoryMapper

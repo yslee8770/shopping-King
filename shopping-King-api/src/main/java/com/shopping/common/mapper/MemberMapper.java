@@ -1,7 +1,7 @@
 package com.shopping.common.mapper;
 
-import com.shopping.member.dto.MemberRequestDto;
-import com.shopping.member.entity.Member;
+import com.shopping.dto.MemberRequestDto;
+import com.shopping.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

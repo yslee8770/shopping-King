@@ -2,6 +2,13 @@ package com.shopping.cart;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.shopping.dto.CartChangeDto;
+import com.shopping.entity.Cart;
+import com.shopping.entity.Product;
+import com.shopping.enums.DeleteAt;
+import com.shopping.repository.CartRepository;
+import com.shopping.repository.ProductRepository;
+import com.shopping.service.CartService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,13 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.MockBeans;
-import com.shopping.cart.dto.CartChangeDto;
-import com.shopping.cart.entity.Cart;
-import com.shopping.cart.repository.CartRepository;
-import com.shopping.cart.service.CartService;
-import com.shopping.common.DeleteAt;
-import com.shopping.product.entity.Product;
-import com.shopping.product.repository.ProductRepository;
 
 @DataJpaTest
 @MockBeans({@MockBean(ProductRepository.class)})
@@ -57,7 +57,7 @@ public class CartServiceIntegrationTest {
         .deleteAt(DeleteAt.N)
         .build();
 
-    Product product = Product.builder().id(cartChangeDto.getProductId()).build();
+    Product product = Product.builder().productId(cartChangeDto.getProductId()).build();
 
     productRepository.save(product);
 

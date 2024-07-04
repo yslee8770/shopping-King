@@ -1,7 +1,8 @@
 package com.shopping.common.mapper;
 
-import com.shopping.category.dto.CategoryDto;
-import com.shopping.category.entity.Category;
+
+import com.shopping.dto.CategoryDto;
+import com.shopping.entity.Category;
 
 public class CategoryMapper {
 

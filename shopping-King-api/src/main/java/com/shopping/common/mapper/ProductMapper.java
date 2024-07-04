@@ -1,10 +1,10 @@
 package com.shopping.common.mapper;
 
+import com.shopping.dto.ProductRequestDto;
+import com.shopping.dto.ProductResponseDto;
+import com.shopping.entity.Category;
+import com.shopping.entity.Product;
 import java.util.Optional;
-import com.shopping.category.entity.Category;
-import com.shopping.product.dto.ProductRequestDto;
-import com.shopping.product.dto.ProductResponseDto;
-import com.shopping.product.entity.Product;
 
 public class ProductMapper {
 
@@ -12,8 +12,8 @@ public class ProductMapper {
     return product == null ? null
         : ProductResponseDto
             .builder()
-            .productId(product.getId())
-            .productName(product.getProductNm())
+            .productId(product.getProductId())
+            .productNm(product.getProductNm())
             .stockQuantity(product.getStockAmount())
             .salesRate(product.getSalesRate())
             .category(

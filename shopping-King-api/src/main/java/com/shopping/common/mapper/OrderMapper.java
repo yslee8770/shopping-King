@@ -1,17 +1,18 @@
 package com.shopping.common.mapper;
 
-import com.shopping.member.entity.Member;
-import com.shopping.order.dto.OrderRequestDto;
-import com.shopping.order.dto.OrderResponseDto;
-import com.shopping.order.entity.Orders;
-import com.shopping.product.entity.Product;
+
+import com.shopping.dto.OrderRequestDto;
+import com.shopping.dto.OrderResponseDto;
+import com.shopping.entity.Member;
+import com.shopping.entity.Orders;
+import com.shopping.entity.Product;
 
 public class OrderMapper {
 
   public static OrderResponseDto ordertoOrderResponseDto(Orders order) {
     return OrderResponseDto
         .builder()
-        .orderId(order.getId())
+        .orderId(order.getOrderId())
         .orderDt(order.getOrderDt())
         .address(order.getAddress())
         .quantity(order.getQuantity())
