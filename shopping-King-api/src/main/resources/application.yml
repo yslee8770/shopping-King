@@ -15,7 +15,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-  security:
-    jwt:
-      secret: mysecretkey
-      expiration: 86400000
+security:
+  jwt:
+    secret: mysecretkeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    expiration: 86400000
