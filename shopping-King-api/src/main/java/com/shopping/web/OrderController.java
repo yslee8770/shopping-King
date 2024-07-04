@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -26,8 +28,8 @@ public class OrderController {
   private final OrderService orderService;
 
 
-  @GetMapping("/list/{memberId}")
-  public ResponseEntity<List<OrderResponseDto>> findOrderList(@PathVariable Long memberId) {
+  @GetMapping("/{memberId}")
+  public ResponseEntity<List<OrderResponseDto>> findOrderList(@RequestParam Long memberId) {
     return ResponseEntity
         .ok(orderService
             .findOrdersByMemberId(memberId)
@@ -36,13 +38,13 @@ public class OrderController {
             .collect(Collectors.toList()));
   }
 
-  @GetMapping("/detail/{orderId}")
+  @GetMapping("/{orderId}")
   public ResponseEntity<OrderResponseDto> findOrderDetail(@PathVariable Long orderId) {
     return ResponseEntity
         .ok(OrderMapper.ordertoOrderResponseDto(orderService.findOrdersByOrderId(orderId)));
   }
 
-  @PostMapping("/add")
+  @PostMapping
   public ResponseEntity<List<OrderResponseDto>> addOrder(
       @RequestBody List<OrderRequestDto> orderRequestDtos) {
     List<OrderResponseDto> responseList = new ArrayList<OrderResponseDto>();
@@ -53,14 +55,12 @@ public class OrderController {
     return ResponseEntity.ok(responseList);
   }
 
-  @PostMapping("/change")
-  public ResponseEntity<List<OrderRequestDto>> changeOrder(
-      @RequestBody List<OrderRequestDto> orderRequestDtos) {
+  @PatchMapping
+  public ResponseEntity<List<OrderRequestDto>> changeOrder(OrderRequestDto orderRequestDtos) {
     return ResponseEntity.ok(null);
   }
 
-
-  @DeleteMapping("cancel/{orderId}")
+  @DeleteMapping("/{orderId}")
   public ResponseEntity<Long> deleteOrder(@PathVariable Long orderId) {
     return ResponseEntity.ok(orderId);
   }
