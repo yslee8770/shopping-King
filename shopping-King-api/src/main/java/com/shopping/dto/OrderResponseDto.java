@@ -1,7 +1,7 @@
 package com.shopping.dto;
 
-import com.shopping.enums.OrderStatus;
 import com.shopping.entity.Product;
+import com.shopping.enums.OrderStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
