@@ -1,4 +1,5 @@
 rootProject.name = 'shopping-King'
 include 'shopping-King-api'
 include 'product-api'
+include 'pay-api'
 
