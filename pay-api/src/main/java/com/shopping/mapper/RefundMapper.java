@@ -1,12 +1,12 @@
 package com.shopping.mapper;
 
-import com.shopping.dto.RefundRequest;
-import com.shopping.dto.RefundResponse;
+import com.shopping.dto.RefundRequestDto;
+import com.shopping.dto.RefundResponseDto;
 import com.shopping.entity.Refund;
 import java.time.LocalDateTime;
 
 public class RefundMapper {
-  public static Refund toEntity(RefundRequest request) {
+  public static Refund toEntity(RefundRequestDto request) {
     return Refund.builder()
         .paymentId(request.getPaymentId())
         .amount(request.getAmount())
@@ -15,8 +15,8 @@ public class RefundMapper {
         .build();
   }
 
-  public static RefundResponse toDto(Refund refund) {
-    return RefundResponse.builder()
+  public static RefundResponseDto toDto(Refund refund) {
+    return RefundResponseDto.builder()
         .id(refund.getId())
         .paymentId(refund.getPaymentId())
         .amount(refund.getAmount())

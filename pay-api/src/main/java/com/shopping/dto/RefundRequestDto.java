@@ -1,17 +1,17 @@
 package com.shopping.dto;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-public class RefundResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class RefundRequestDto {
 
-  private Long id;
   private Long paymentId;
   private double amount;
-  private String status;
-  private LocalDateTime refundDate;
 }
 

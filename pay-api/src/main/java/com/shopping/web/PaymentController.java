@@ -1,9 +1,9 @@
 package com.shopping.web;
 
-import com.shopping.dto.PaymentRequest;
-import com.shopping.dto.PaymentResponse;
-import com.shopping.dto.RefundRequest;
-import com.shopping.dto.RefundResponse;
+import com.shopping.dto.PaymentRequestDto;
+import com.shopping.dto.PaymentResponseDto;
+import com.shopping.dto.RefundRequestDto;
+import com.shopping.dto.RefundResponseDto;
 import com.shopping.service.PaymentService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +23,21 @@ public class PaymentController {
   private PaymentService paymentService;
 
   @PostMapping("/process")
-  public ResponseEntity<PaymentResponse> processPayment(@RequestBody PaymentRequest request) {
-    PaymentResponse response = paymentService.processPayment(request);
+  public ResponseEntity<PaymentResponseDto> processPayment(@RequestBody PaymentRequestDto request) {
+    PaymentResponseDto response = paymentService.processPayment(request);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{transactionId}")
-  public ResponseEntity<PaymentResponse> getPayment(@PathVariable String transactionId) {
-    Optional<PaymentResponse> response = paymentService.getPaymentByTransactionId(transactionId);
+  public ResponseEntity<PaymentResponseDto> getPayment(@PathVariable String transactionId) {
+    Optional<PaymentResponseDto> response = paymentService.getPaymentByTransactionId(transactionId);
     return response.map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PostMapping("/refund")
-  public ResponseEntity<RefundResponse> processRefund(@RequestBody RefundRequest request) {
-    RefundResponse response = paymentService.processRefund(request);
+  public ResponseEntity<RefundResponseDto> processRefund(@RequestBody RefundRequestDto request) {
+    RefundResponseDto response = paymentService.processRefund(request);
     return ResponseEntity.ok(response);
   }
 }

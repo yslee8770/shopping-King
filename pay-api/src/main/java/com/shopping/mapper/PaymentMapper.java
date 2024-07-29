@@ -1,12 +1,12 @@
 package com.shopping.mapper;
 
-import com.shopping.dto.PaymentRequest;
-import com.shopping.dto.PaymentResponse;
+import com.shopping.dto.PaymentRequestDto;
+import com.shopping.dto.PaymentResponseDto;
 import com.shopping.entity.Payment;
 import java.time.LocalDateTime;
 
 public class PaymentMapper {
-  public static Payment toEntity(PaymentRequest request) {
+  public static Payment toEntity(PaymentRequestDto request) {
     return Payment.builder()
         .paymentMethod(request.getPaymentMethod())
         .amount(request.getAmount())
@@ -16,8 +16,8 @@ public class PaymentMapper {
         .build();
   }
 
-  public static PaymentResponse toDto(Payment payment) {
-    return PaymentResponse.builder()
+  public static PaymentResponseDto toDto(Payment payment) {
+    return PaymentResponseDto.builder()
         .id(payment.getId())
         .paymentMethod(payment.getPaymentMethod())
         .amount(payment.getAmount())

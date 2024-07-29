@@ -1,9 +1,9 @@
 package com.shopping.service;
 
-import com.shopping.dto.PaymentRequest;
-import com.shopping.dto.PaymentResponse;
-import com.shopping.dto.RefundRequest;
-import com.shopping.dto.RefundResponse;
+import com.shopping.dto.PaymentRequestDto;
+import com.shopping.dto.PaymentResponseDto;
+import com.shopping.dto.RefundRequestDto;
+import com.shopping.dto.RefundResponseDto;
 import com.shopping.entity.Payment;
 import com.shopping.entity.Refund;
 import com.shopping.mapper.PaymentMapper;
@@ -23,18 +23,18 @@ public class PaymentService {
   @Autowired
   private RefundRepository refundRepository;
 
-  public PaymentResponse processPayment(PaymentRequest request) {
+  public PaymentResponseDto processPayment(PaymentRequestDto request) {
     Payment payment = PaymentMapper.toEntity(request);
     payment = paymentRepository.save(payment);
     return PaymentMapper.toDto(payment);
   }
 
-  public Optional<PaymentResponse> getPaymentByTransactionId(String transactionId) {
+  public Optional<PaymentResponseDto> getPaymentByTransactionId(String transactionId) {
     return paymentRepository.findByTransactionId(transactionId)
         .map(PaymentMapper::toDto);
   }
 
-  public RefundResponse processRefund(RefundRequest request) {
+  public RefundResponseDto processRefund(RefundRequestDto request) {
     Refund refund = RefundMapper.toEntity(request);
     refund = refundRepository.save(refund);
     return RefundMapper.toDto(refund);
